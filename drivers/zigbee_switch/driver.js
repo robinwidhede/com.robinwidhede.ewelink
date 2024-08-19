@@ -8,10 +8,10 @@ class ZigbeeSwitch extends Driver {
 
     // Registering FlowCard Triggers for different events
     this.triggers = {
-      click: this.homey.flow.getDeviceTriggerCard("click_switch"),
-      double_click: this.homey.flow.getDeviceTriggerCard("double_click_switch"),
-      long_press: this.homey.flow.getDeviceTriggerCard("long_press_switch"),
-    };
+	  click: this.homey.flow.getDeviceTriggerCard("click_switch"),
+	  double_click: this.homey.flow.getDeviceTriggerCard("double_click_switch"),
+	  long_press: this.homey.flow.getDeviceTriggerCard("long_press_switch"),
+	};
   }
 
   async onPair(session) {

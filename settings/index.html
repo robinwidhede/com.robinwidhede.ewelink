@@ -2,16 +2,9 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>Ewelink Settings</title>
-    <script
-      type="text/javascript"
-      src="/homey.js"
-      data-origin="settings"
-    ></script>
+    <script type="text/javascript" src="/homey.js" data-origin="settings"></script>
     <script src="../assets/vue.min.js"></script>
     <link rel="stylesheet" href="../assets/bulma.min.css" />
     <style>
@@ -41,25 +34,13 @@
       }
     </style>
   </head>
-  <body
-    style="background: linear-gradient(135deg, #5541d6 0%, #3f94ff 100%)"
-  >
+  <body style="background: linear-gradient(135deg, #5541d6 0%, #3f94ff 100%)">
     <div id="ewelink" style="padding: 10px">
       <div class="container">
-        <div
-          v-show="alert"
-          id="alert"
-          class="notification"
-          :class="alertClass"
-          style="margin-bottom: 10px"
-        >
+        <div v-show="alert" id="alert" class="notification" :class="alertClass" style="margin-bottom: 10px">
           {{ alertMessage }}
         </div>
-        <div
-          v-if="page === 'login'"
-          class="card equal-height"
-          style="border-radius: 5px"
-        >
+        <div v-if="page === 'login'" class="card equal-height" style="border-radius: 5px">
           <div class="card-content is-flex is-horizontal-center">
             <figure class="image is-64x64">
               <img src="../assets/logo.png" />
@@ -112,11 +93,7 @@
             </div>
           </div>
         </div>
-        <div
-          v-if="page === 'profile'"
-          class="card equal-height"
-          style="border-radius: 5px"
-        >
+        <div v-if="page === 'profile'" class="card equal-height" style="border-radius: 5px">
           <div class="card-content is-flex is-horizontal-center">
             <figure class="image is-64x64">
               <img src="../assets/logo.png" />
@@ -125,21 +102,11 @@
           <div class="card-content columns">
             <div class="column is-4">
               <label class="label">Hello</label>
-              <input
-                class="input is-static"
-                type="text"
-                :value="login"
-                readonly
-              />
+              <input class="input is-static" type="text" :value="login" readonly />
             </div>
             <div class="column is-4">
               <label class="label">Connected devices</label>
-              <input
-                class="input is-static"
-                type="number"
-                :value="deviceCount"
-                readonly
-              />
+              <input class="input is-static" type="number" :value="deviceCount" readonly />
             </div>
             <div class="column is-4">
               <button
@@ -183,12 +150,8 @@
           },
           mounted() {
             Homey.get("account", (err, user) => {
-              const alert = document.getElementById("alert");
-
               if (err) {
-                this.alertMessage = `Error: ${err}`;
-                this.alertClass = "is-danger";
-                this.alert = true;
+                this.showAlert(`Error: ${err}`, "is-danger");
                 return Homey.alert(err);
               }
 
@@ -205,14 +168,23 @@
             });
           },
           methods: {
+            showAlert(message, type) {
+              this.alertMessage = message;
+              this.alertClass = type;
+              this.alert = true;
+            },
             connectAndFetchDevices(user) {
-              Homey.api("POST", "/getDevices", user, (error, result) => {
-                const alert = document.getElementById("alert");
+              Homey.api("POST", "/api/app/com.robinwidhede.ewelink/getDevices", user, (error, result) => {
+                console.log("API response:", result);  // Improved logging
+                if (error || !result) {
+                  this.showAlert(`Error: ${error.message || "Unknown error"}`, "is-danger");
+                  this.loading = false;
+                  this.buttonText = "Sign in";
+                  return;
+                }
 
-                if (error || result.status === "error") {
-                  this.alertMessage = `Error: ${result ? result.msg : error.message}`;
-                  this.alertClass = "is-danger";
-                  this.alert = true;
+                if (result.status === "error") {
+                  this.showAlert(result.msg || "Error occurred", "is-danger");
                   this.loading = false;
                   this.buttonText = "Sign in";
                 } else {
@@ -235,38 +207,39 @@
                 countryCode: this.countryCode,
               };
 
-              Homey.api("POST", "/getDevices", signData, (error, result) => {
-                const alert = document.getElementById("alert");
+              console.log("Attempting to sign in...", signData);
 
-                if (result.status === "error") {
-                  this.alertMessage = result.msg;
-                  this.alertClass = "is-danger";
-                  this.alert = true;
+              Homey.api("POST", "/api/app/com.robinwidhede.ewelink/getDevices", signData, (error, result) => {
+                console.log("API response:", result);
+
+                if (error || !result) {
+                  this.showAlert(`Error: ${error.message || "Unknown error"}`, "is-danger");
                   this.loading = false;
                   this.buttonText = "Sign in";
                   return;
                 }
 
-                this.page = "profile";
-                this.deviceCount = result.deviceList.length;
-
-                Homey.set("account", signData, (error) => {
-                  if (error) {
-                    this.alertMessage = `Error: ${error.message}`;
-                    this.alertClass = "is-danger";
-                    this.alert = true;
-                    return Homey.alert(error.message);
-                  }
-                  this.alertMessage = "Saved";
-                  this.alertClass = "is-success";
-                  this.alert = true;
+                if (result.status === "error") {
+                  this.showAlert(result.msg || "Error occurred", "is-danger");
                   this.loading = false;
                   this.buttonText = "Sign in";
-                });
+                } else {
+                  this.page = "profile";
+                  this.deviceCount = result.deviceList.length;
+
+                  Homey.set("account", signData, (error) => {
+                    if (error) {
+                      this.showAlert(`Error: ${error.message}`, "is-danger");
+                      return Homey.alert(error.message);
+                    }
+                    this.showAlert("Saved", "is-success");
+                    this.loading = false;
+                    this.buttonText = "Sign in";
+                  });
+                }
               });
             },
             logout() {
-              const alert = document.getElementById("alert");
               this.page = "login";
               this.deviceCount = 0;
               this.password = null;
@@ -276,13 +249,9 @@
 
               Homey.unset("account", (err) => {
                 if (err) {
-                  this.alertMessage = `Error: ${err}`;
-                  this.alertClass = "is-danger";
-                  this.alert = true;
+                  this.showAlert(`Error: ${err}`, "is-danger");
                 } else {
-                  this.alertMessage = "Logged out successfully";
-                  this.alertClass = "is-success";
-                  this.alert = true;
+                  this.showAlert("Logged out successfully", "is-success");
                 }
               });
             },

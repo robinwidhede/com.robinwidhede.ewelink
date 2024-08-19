@@ -13,6 +13,18 @@ class Ewelink extends App {
     // Initialize eWeLink API
     this.ewelinkApi = new EwelinkApi(this.log);
 
+    // Register API endpoint
+    this.homey.cloud.createWebhook('/getDevices', async (data) => {
+      try {
+        const signData = data.body;
+        const devices = await this.getDevices(signData);
+        return { status: 'success', deviceList: devices };
+      } catch (error) {
+        this.log("API request failed:", error);
+        return { status: 'error', msg: error.message };
+      }
+    });
+
     // Bind the settings change handler
     this.onSettingsChanged = this.onSettingsChanged.bind(this);
 

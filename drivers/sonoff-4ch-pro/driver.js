@@ -9,17 +9,17 @@ class Sonoff4CHPro extends Driver {
   }
 
   registerFlowActions() {
-    this.actions = {
-      secondChannelOn: this.homey.flow.getActionCard('secondChannelOn').register(),
-      secondChannelOff: this.homey.flow.getActionCard('secondChannelOff').register(),
-      secondChannelToggle: this.homey.flow.getActionCard('secondChannelToggle').register(),
-      threeChannelOn: this.homey.flow.getActionCard('threeChannelOn').register(),
-      threeChannelOff: this.homey.flow.getActionCard('threeChannelOff').register(),
-      threeChannelToggle: this.homey.flow.getActionCard('threeChannelToggle').register(),
-      fourChannelOn: this.homey.flow.getActionCard('fourChannelOn').register(),
-      fourChannelOff: this.homey.flow.getActionCard('fourChannelOff').register(),
-      fourChannelToggle: this.homey.flow.getActionCard('fourChannelToggle').register(),
-    };
+	this.actions = {
+		secondChannelOn: this.homey.flow.getActionCard('secondChannelOn'),
+		secondChannelOff: this.homey.flow.getActionCard('secondChannelOff'),
+		secondChannelToggle: this.homey.flow.getActionCard('secondChannelToggle'),
+		threeChannelOn: this.homey.flow.getActionCard('threeChannelOn'),
+		threeChannelOff: this.homey.flow.getActionCard('threeChannelOff'),
+		threeChannelToggle: this.homey.flow.getActionCard('threeChannelToggle'),
+		fourChannelOn: this.homey.flow.getActionCard('fourChannelOn'),
+		fourChannelOff: this.homey.flow.getActionCard('fourChannelOff'),
+		fourChannelToggle: this.homey.flow.getActionCard('fourChannelToggle'),
+	};
   }
 
   async onPairListDevices() {

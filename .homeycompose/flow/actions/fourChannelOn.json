@@ -1,0 +1,13 @@
+{
+  "id": "fourChannelOn",
+  "title": {
+    "en": "Four channel turn on"
+  },
+  "args": [
+    {
+      "name": "device",
+      "type": "device",
+      "filter": "driver_id=sonoff-4ch-pro"
+    }
+  ]
+}

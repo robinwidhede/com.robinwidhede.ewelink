@@ -18,6 +18,27 @@
       .is-horizontal-center {
         justify-content: center;
       }
+      .loading-spinner {
+        border: 4px solid rgba(0, 0, 0, 0.1);
+        border-left-color: #22a6b3;
+        border-radius: 50%;
+        width: 36px;
+        height: 36px;
+        animation: spin 1s linear infinite;
+        margin: auto;
+      }
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+      .disabled-input {
+        background-color: #f0f0f0;
+        pointer-events: none;
+      }
     </style>
   </head>
   <body
@@ -28,10 +49,11 @@
         <div
           v-show="alert"
           id="alert"
-          class="notification is-danger"
+          class="notification"
+          :class="alertClass"
           style="margin-bottom: 10px"
         >
-          Alert
+          {{ alertMessage }}
         </div>
         <div
           v-if="page === 'login'"
@@ -47,30 +69,33 @@
             <div class="column is-4">
               <input
                 class="input"
+                :class="{ 'disabled-input': loading }"
                 type="text"
                 placeholder="Country code (e.g., 7 for RU, 998 for UZ)"
                 v-model="countryCode"
-                @change="onEdit"
+                @input="onEdit"
                 style="font-weight: 600; padding-left: 10px; padding-top: 6px"
               />
             </div>
             <div class="column is-4">
               <input
                 class="input"
+                :class="{ 'disabled-input': loading }"
                 type="text"
                 placeholder="Phone or email"
                 v-model="login"
-                @change="onEdit"
+                @input="onEdit"
                 style="font-weight: 600; padding-left: 10px; padding-top: 6px"
               />
             </div>
             <div class="column is-4">
               <input
                 class="input"
+                :class="{ 'disabled-input': loading }"
                 type="password"
                 placeholder="Password"
                 v-model="password"
-                @change="onEdit"
+                @input="onEdit"
                 style="font-weight: 600; padding-left: 10px; padding-top: 6px"
               />
             </div>
@@ -80,7 +105,7 @@
                 class="button is-primary is-fullwidth"
                 style="background: linear-gradient(135deg, #5541d6 0%, #3f94ff 100%)"
                 @click="signin"
-                :disabled="empty"
+                :disabled="empty || loading"
               >
                 {{ buttonText }}
               </button>
@@ -128,11 +153,18 @@
             </div>
           </div>
         </div>
+        <div v-if="loading" class="loading-spinner"></div>
       </div>
     </div>
     <script type="text/javascript">
       function onHomeyReady(Homey) {
+        if (!Homey) {
+          console.error("Homey object is not available.");
+          return;
+        }
+
         Homey.ready();
+
         new Vue({
           el: "#ewelink",
           data() {
@@ -141,6 +173,8 @@
               password: null,
               countryCode: null,
               alert: false,
+              alertMessage: "",
+              alertClass: "",
               page: "login",
               deviceCount: 0,
               buttonText: "Loading...",
@@ -152,7 +186,8 @@
               const alert = document.getElementById("alert");
 
               if (err) {
-                alert.innerText = err;
+                this.alertMessage = `Error: ${err}`;
+                this.alertClass = "is-danger";
                 this.alert = true;
                 return Homey.alert(err);
               }
@@ -165,28 +200,35 @@
                 this.password = user.password;
                 this.countryCode = user.countryCode;
 
-                Homey.api("POST", "/getDevices", user, (error, result) => {
-                  if (result.status === "error") {
-                    this.alert = true;
-                    alert.innerHTML = result.msg;
-                    this.loading = false;
-                    this.buttonText = "Sign in";
-                  } else {
-                    this.page = "profile";
-                    this.deviceCount = result.deviceList.length;
-                    this.loading = false;
-                    this.buttonText = "Sign in";
-                  }
-                });
+                this.connectAndFetchDevices(user);
               }
             });
           },
           methods: {
+            connectAndFetchDevices(user) {
+              Homey.api("POST", "/getDevices", user, (error, result) => {
+                const alert = document.getElementById("alert");
+
+                if (error || result.status === "error") {
+                  this.alertMessage = `Error: ${result ? result.msg : error.message}`;
+                  this.alertClass = "is-danger";
+                  this.alert = true;
+                  this.loading = false;
+                  this.buttonText = "Sign in";
+                } else {
+                  this.page = "profile";
+                  this.deviceCount = result.deviceList.length;
+                  this.loading = false;
+                }
+              });
+            },
             signin() {
+              if (this.empty) return;
+
               this.loading = true;
               this.buttonText = "Loading...";
               this.alert = false;
-              const alert = document.getElementById("alert");
+
               const signData = {
                 login: this.login,
                 password: this.password,
@@ -194,14 +236,14 @@
               };
 
               Homey.api("POST", "/getDevices", signData, (error, result) => {
+                const alert = document.getElementById("alert");
+
                 if (result.status === "error") {
+                  this.alertMessage = result.msg;
+                  this.alertClass = "is-danger";
                   this.alert = true;
-                  alert.innerHTML = result.msg;
-                  alert.classList.remove("is-success");
-                  alert.classList.add("is-danger");
                   this.loading = false;
                   this.buttonText = "Sign in";
-
                   return;
                 }
 
@@ -210,12 +252,14 @@
 
                 Homey.set("account", signData, (error) => {
                   if (error) {
-                    alert.innerText = error;
-                    return Homey.alert(error);
+                    this.alertMessage = `Error: ${error.message}`;
+                    this.alertClass = "is-danger";
+                    this.alert = true;
+                    return Homey.alert(error.message);
                   }
-                  alert.classList.remove("is-danger");
-                  alert.classList.add("is-success");
-                  alert.innerText = "Saved";
+                  this.alertMessage = "Saved";
+                  this.alertClass = "is-success";
+                  this.alert = true;
                   this.loading = false;
                   this.buttonText = "Sign in";
                 });
@@ -232,30 +276,29 @@
 
               Homey.unset("account", (err) => {
                 if (err) {
-                  alert.innerText = err;
+                  this.alertMessage = `Error: ${err}`;
+                  this.alertClass = "is-danger";
+                  this.alert = true;
+                } else {
+                  this.alertMessage = "Logged out successfully";
+                  this.alertClass = "is-success";
+                  this.alert = true;
                 }
-                alert.classList.remove("is-danger");
-                alert.classList.add("is-success");
-                alert.innerText = "Logged out successfully";
-                this.alert = true;
               });
             },
             onEdit() {
-              const alert = document.getElementById("alert");
               this.alert = false;
-              alert.classList.remove("is-success");
-              alert.classList.add("is-danger");
             },
           },
           computed: {
             empty() {
               return (
                 !this.login ||
-                this.login === "" ||
+                this.login.trim() === "" ||
                 !this.password ||
-                this.password === "" ||
+                this.password.trim() === "" ||
                 !this.countryCode ||
-                this.countryCode === "" ||
+                this.countryCode.trim() === "" ||
                 this.loading
               );
             },

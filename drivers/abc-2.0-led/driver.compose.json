@@ -1,0 +1,158 @@
+{
+  "id": "abc-2.0-led",
+  "name": {
+    "en": "ABC 2.0 LED"
+  },
+  "class": "light",
+  "capabilities": ["onoff", "dim", "light_hue", "RGBEffects"],
+  "images": {
+    "large": "/drivers/abc-2.0-led/assets/images/large.png",
+    "small": "/drivers/abc-2.0-led/assets/images/small.png"
+  },
+  "pair": [
+    {
+      "id": "list_devices",
+      "template": "list_devices",
+      "navigation": {
+        "next": "add_devices"
+      },
+      "options": {
+        "singular": false
+      }
+    },
+    {
+      "id": "add_devices",
+      "template": "add_devices"
+    }
+  ],
+  "settings": [
+    {
+      "type": "group",
+      "label": {
+        "en": "Device information"
+      },
+      "children": [
+        {
+          "id": "brandName",
+          "type": "label",
+          "label": {
+            "en": "Brand name"
+          },
+          "value": "brand_name"
+        },
+        {
+          "id": "model",
+          "type": "label",
+          "label": {
+            "en": "Model"
+          },
+          "value": "model_name"
+        },
+        {
+          "id": "ip",
+          "type": "label",
+          "label": {
+            "en": "IP"
+          },
+          "value": "ip_address"
+        },
+        {
+          "id": "fwVersion",
+          "type": "label",
+          "label": {
+            "en": "Firmware version"
+          },
+          "value": "fw_version"
+        }
+      ]
+    },
+    {
+      "type": "group",
+      "label": {
+        "en": "Extra settings"
+      },
+      "children": [
+        {
+          "id": "powerResponse",
+          "type": "dropdown",
+          "value": "off",
+          "label": {
+            "en": "Power-on response"
+          },
+          "values": [
+            {
+              "id": "on",
+              "label": {
+                "en": "On"
+              }
+            },
+            {
+              "id": "off",
+              "label": {
+                "en": "Off"
+              }
+            },
+            {
+              "id": "stay",
+              "label": {
+                "en": "Resume the state before power outage"
+              }
+            }
+          ]
+        },
+        {
+          "id": "RGBEffects",
+          "type": "dropdown",
+          "label": {
+            "en": "RGB Effects"
+          },
+          "value": "1",
+          "values": [
+            {
+              "id": "1",
+              "label": {
+                "en": "Colorful"
+              }
+            },
+            {
+              "id": "2",
+              "label": {
+                "en": "Colorful gradient"
+              }
+            },
+            {
+              "id": "3",
+              "label": {
+                "en": "Colorful breath"
+              }
+            },
+            {
+              "id": "8",
+              "label": {
+                "en": "RGB gradient"
+              }
+            },
+            {
+              "id": "9",
+              "label": {
+                "en": "RGB pulse"
+              }
+            },
+            {
+              "id": "10",
+              "label": {
+                "en": "RGB breath"
+              }
+            },
+            {
+              "id": "11",
+              "label": {
+                "en": "RGB strobe"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>Ewelink Settings</title>
+    <script
+      type="text/javascript"
+      src="/homey.js"
+      data-origin="settings"
+    ></script>
+    <script src="../assets/vue.min.js"></script>
+    <link rel="stylesheet" href="../assets/bulma.min.css" />
+    <style>
+      .is-horizontal-center {
+        justify-content: center;
+      }
+    </style>
+  </head>
+  <body
+    style="background: linear-gradient(135deg, #5541d6 0%, #3f94ff 100%)"
+  >
+    <div id="ewelink" style="padding: 10px">
+      <div class="container">
+        <div
+          v-show="alert"
+          id="alert"
+          class="notification is-danger"
+          style="margin-bottom: 10px"
+        >
+          Alert
+        </div>
+        <div
+          v-if="page === 'login'"
+          class="card equal-height"
+          style="border-radius: 5px"
+        >
+          <div class="card-content is-flex is-horizontal-center">
+            <figure class="image is-64x64">
+              <img src="../assets/logo.png" />
+            </figure>
+          </div>
+          <div class="card-content columns">
+            <div class="column is-4">
+              <input
+                class="input"
+                type="text"
+                placeholder="Country code (e.g., 7 for RU, 998 for UZ)"
+                v-model="countryCode"
+                @change="onEdit"
+                style="font-weight: 600; padding-left: 10px; padding-top: 6px"
+              />
+            </div>
+            <div class="column is-4">
+              <input
+                class="input"
+                type="text"
+                placeholder="Phone or email"
+                v-model="login"
+                @change="onEdit"
+                style="font-weight: 600; padding-left: 10px; padding-top: 6px"
+              />
+            </div>
+            <div class="column is-4">
+              <input
+                class="input"
+                type="password"
+                placeholder="Password"
+                v-model="password"
+                @change="onEdit"
+                style="font-weight: 600; padding-left: 10px; padding-top: 6px"
+              />
+            </div>
+            <div class="column is-4">
+              <button
+                type="button"
+                class="button is-primary is-fullwidth"
+                style="background: linear-gradient(135deg, #5541d6 0%, #3f94ff 100%)"
+                @click="signin"
+                :disabled="empty"
+              >
+                {{ buttonText }}
+              </button>
+            </div>
+          </div>
+        </div>
+        <div
+          v-if="page === 'profile'"
+          class="card equal-height"
+          style="border-radius: 5px"
+        >
+          <div class="card-content is-flex is-horizontal-center">
+            <figure class="image is-64x64">
+              <img src="../assets/logo.png" />
+            </figure>
+          </div>
+          <div class="card-content columns">
+            <div class="column is-4">
+              <label class="label">Hello</label>
+              <input
+                class="input is-static"
+                type="text"
+                :value="login"
+                readonly
+              />
+            </div>
+            <div class="column is-4">
+              <label class="label">Connected devices</label>
+              <input
+                class="input is-static"
+                type="number"
+                :value="deviceCount"
+                readonly
+              />
+            </div>
+            <div class="column is-4">
+              <button
+                type="button"
+                class="button is-primary is-fullwidth"
+                style="background: linear-gradient(135deg, #5541d6 0%, #3f94ff 100%)"
+                @click="logout"
+              >
+                Logout
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script type="text/javascript">
+      function onHomeyReady(Homey) {
+        Homey.ready();
+        new Vue({
+          el: "#ewelink",
+          data() {
+            return {
+              login: null,
+              password: null,
+              countryCode: null,
+              alert: false,
+              page: "login",
+              deviceCount: 0,
+              buttonText: "Loading...",
+              loading: true,
+            };
+          },
+          mounted() {
+            Homey.get("account", (err, user) => {
+              const alert = document.getElementById("alert");
+
+              if (err) {
+                alert.innerText = err;
+                this.alert = true;
+                return Homey.alert(err);
+              }
+
+              if (!user || !user.countryCode) {
+                this.loading = false;
+                this.buttonText = "Sign in";
+              } else {
+                this.login = user.login;
+                this.password = user.password;
+                this.countryCode = user.countryCode;
+
+                Homey.api("POST", "/getDevices", user, (error, result) => {
+                  if (result.status === "error") {
+                    this.alert = true;
+                    alert.innerHTML = result.msg;
+                    this.loading = false;
+                    this.buttonText = "Sign in";
+                  } else {
+                    this.page = "profile";
+                    this.deviceCount = result.deviceList.length;
+                    this.loading = false;
+                    this.buttonText = "Sign in";
+                  }
+                });
+              }
+            });
+          },
+          methods: {
+            signin() {
+              this.loading = true;
+              this.buttonText = "Loading...";
+              this.alert = false;
+              const alert = document.getElementById("alert");
+              const signData = {
+                login: this.login,
+                password: this.password,
+                countryCode: this.countryCode,
+              };
+
+              Homey.api("POST", "/getDevices", signData, (error, result) => {
+                if (result.status === "error") {
+                  this.alert = true;
+                  alert.innerHTML = result.msg;
+                  alert.classList.remove("is-success");
+                  alert.classList.add("is-danger");
+                  this.loading = false;
+                  this.buttonText = "Sign in";
+
+                  return;
+                }
+
+                this.page = "profile";
+                this.deviceCount = result.deviceList.length;
+
+                Homey.set("account", signData, (error) => {
+                  if (error) {
+                    alert.innerText = error;
+                    return Homey.alert(error);
+                  }
+                  alert.classList.remove("is-danger");
+                  alert.classList.add("is-success");
+                  alert.innerText = "Saved";
+                  this.loading = false;
+                  this.buttonText = "Sign in";
+                });
+              });
+            },
+            logout() {
+              const alert = document.getElementById("alert");
+              this.page = "login";
+              this.deviceCount = 0;
+              this.password = null;
+              this.countryCode = null;
+              this.loading = false;
+              this.buttonText = "Sign in";
+
+              Homey.unset("account", (err) => {
+                if (err) {
+                  alert.innerText = err;
+                }
+                alert.classList.remove("is-danger");
+                alert.classList.add("is-success");
+                alert.innerText = "Logged out successfully";
+                this.alert = true;
+              });
+            },
+            onEdit() {
+              const alert = document.getElementById("alert");
+              this.alert = false;
+              alert.classList.remove("is-success");
+              alert.classList.add("is-danger");
+            },
+          },
+          computed: {
+            empty() {
+              return (
+                !this.login ||
+                this.login === "" ||
+                !this.password ||
+                this.password === "" ||
+                !this.countryCode ||
+                this.countryCode === "" ||
+                this.loading
+              );
+            },
+          },
+        });
+      }
+    </script>
+  </body>
+</html>

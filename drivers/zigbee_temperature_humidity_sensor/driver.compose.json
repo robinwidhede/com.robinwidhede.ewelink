@@ -1,0 +1,65 @@
+{
+  "id": "zigbee_temperature_humidity_sensor",
+  "name": {
+    "en": "Temperature Humidity sensor"
+  },
+  "class": "socket",
+  "capabilities": ["measure_temperature", "measure_humidity", "measure_battery", "alarm_battery"],
+  "images": {
+    "large": "/drivers/zigbee_temperature_humidity_sensor/assets/images/large.png",
+    "small": "/drivers/zigbee_temperature_humidity_sensor/assets/images/small.png"
+  },
+  "energy": {
+    "batteries": ["CR2450"]
+  },
+  "pair": [
+    {
+      "id": "list_devices",
+      "template": "list_devices",
+      "navigation": {
+        "next": "add_devices"
+      },
+      "options": {
+        "singular": false
+      }
+    },
+    {
+      "id": "add_devices",
+      "template": "add_devices"
+    }
+  ],
+  "settings": [
+    {
+      "type": "group",
+      "label": {
+        "en": "Device information"
+      },
+      "children": [
+        {
+          "id": "brandName",
+          "type": "label",
+          "label": {
+            "en": "Brand name"
+          },
+          "value": "brand_name"
+        },
+        {
+          "id": "model",
+          "type": "label",
+          "label": {
+            "en": "Model"
+          },
+          "value": "model_name"
+        },
+        {
+          "id": "ip",
+          "type": "label",
+          "label": {
+            "en": "IP"
+          },
+          "value": "ip_address"
+        }
+      ]
+    }
+  ]
+}

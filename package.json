@@ -1,0 +1,30 @@
+{
+  "name": "com.robinwidhede.ewelink",
+  "version": "1.0.0",
+  "description": "ewelink integration for Homey",
+  "main": "app.js",
+  "scripts": {
+	"compose": "homeyCompose",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint --ext .js,.ts --ignore-path .gitignore ."
+  },
+  "keywords": [
+    "ewelink",
+    "homey",
+    "smart home",
+    "iot"
+  ],
+  "dependencies": {
+    "axios": "^1.7.4",
+    "color-convert": "^2.0.1",
+    "interval-promise": "^1.4.0",
+    "node-dns-sd": "^1.0.1",
+    "rollbar": "^2.26.4",
+    "websocket-as-promised": "^2.1.0",
+    "ws": "^8.18.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.32.0",
+    "eslint-config-athom": "^3.1.3"
+  }
+}

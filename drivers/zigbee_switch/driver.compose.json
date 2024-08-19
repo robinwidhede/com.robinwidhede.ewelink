@@ -1,0 +1,65 @@
+{
+  "id": "zigbee_switch",
+  "name": {
+    "en": "Switch"
+  },
+  "class": "socket",
+  "capabilities": ["measure_battery", "alarm_battery"],
+  "images": {
+    "large": "/drivers/zigbee_switch/assets/images/large.png",
+    "small": "/drivers/zigbee_switch/assets/images/small.png"
+  },
+  "energy": {
+    "batteries": ["CR2450"]
+  },
+  "pair": [
+    {
+      "id": "list_devices",
+      "template": "list_devices",
+      "navigation": {
+        "next": "add_devices"
+      },
+      "options": {
+        "singular": false
+      }
+    },
+    {
+      "id": "add_devices",
+      "template": "add_devices"
+    }
+  ],
+  "settings": [
+    {
+      "type": "group",
+      "label": {
+        "en": "Device information"
+      },
+      "children": [
+        {
+          "id": "brandName",
+          "type": "label",
+          "label": {
+            "en": "Brand name"
+          },
+          "value": "brand_name"
+        },
+        {
+          "id": "model",
+          "type": "label",
+          "label": {
+            "en": "Model"
+          },
+          "value": "model_name"
+        },
+        {
+          "id": "ip",
+          "type": "label",
+          "label": {
+            "en": "IP"
+          },
+          "value": "ip_address"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,251 @@
+{
+  "id": "com.robinwidhede.ewelink",
+  "version": "1.0.0",
+  "compatibility": ">=5.0.0",
+  "sdk": 3,
+  "platforms": [
+    "local"
+  ],
+  "name": {
+    "en": "eWeLink"
+  },
+  "description": {
+    "en": "Adds support for eWeLink (Sonoff) devices on Homey Pro (Early 2023)."
+  },
+  "category": [
+    "lights"
+  ],
+  "permissions": [],
+  "images": {
+    "small": "/assets/images/small.jpg",
+    "large": "/assets/images/large.jpg"
+  },
+  "brandColor": "#007EC8",
+  "author": {
+    "name": "Robin Widhede",
+    "email": "robinwidhede@icloud.com"
+  },
+  "drivers": [
+    {
+	  "id": "abc-2.0-led",
+	  "name": {
+		"en": "ABC 2.0 LED"
+	  },
+	  "id": "circuit-breaker-zjsb9",
+	  "name": {
+		"en": "Circuit Breaker"
+	  },
+	  "id": "coolkit-outdoor-socket",
+	  "name": {
+		"en": "Coolkit Outdoor Socket"
+	  },
+	  "id": "coolkit-socket",
+	  "name": {
+		"en": "Coolkit Socket"
+	  },
+	  "id": "generic",
+	  "name": {
+		"en": "Generic devices"
+	  },
+	  "id": "sonoff-4ch-pro",
+	  "name": {
+		"en": "Sonoff 4CH Pro"
+	  },
+	  "id": "sonoff-basic",
+	  "name": {
+		"en": "Sonoff Basic / Basic 2"
+	  },
+	  "id": "sonoff-g1-gsm",
+	  "name": {
+		"en": "Sonoff G1 GSM"
+	  },
+	  "id": "sonoff-mini",
+	  "name": {
+		"en": "Sonoff Mini"
+	  },
+	  "id": "sonoff-pow",
+	  "name": {
+		"en": "Sonoff Pow"
+	  },
+	  "id": "sonoff-s20",
+	  "name": {
+		"en": "Sonoff S20 / S26 (R1)"
+	  },
+	  "id": "sonoff-sc",
+	  "name": {
+		"en": "Sonoff SC"
+	  },
+	  "id": "sonoff-t1-2c",
+	  "name": {
+		"en": "Sonoff T1 2C"
+	  },
+	  "id": "sonoff-t4-1c",
+	  "name": {
+		"en": "Sonoff T4EU1C"
+	  },
+	  "id": "sonoff-th16",
+	  "name": {
+		"en": "Sonoff TH16"
+	  },
+	  "id": "zigbee_motion_sensor",
+	  "name": {
+		"en": "Motion sensor"
+	  },
+	  "id": "zigbee_switch",
+	  "name": {
+		"en": "Switch"
+	  },
+	  "id": "zigbee_temperature_humidity_sensor",
+	  "name": {
+		"en": "Temperature Humidity sensor"
+	  }
+	}
+  ],
+  "flow": {
+    "triggers": [
+      {
+        "id": "click_switch",
+        "title": {
+          "en": "Single click switch"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=zigbee_switch"
+          }
+        ]
+      },
+      {
+        "id": "double_click_switch",
+        "title": {
+          "en": "Double click switch"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=zigbee_switch"
+          }
+        ]
+      },
+      {
+        "id": "long_press_switch",
+        "title": {
+          "en": "Long press switch"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=zigbee_switch"
+          }
+        ]
+      }
+    ],
+    "actions": [
+      {
+        "id": "secondChannelOn",
+        "title": {
+          "en": "Second channel turn on"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=sonoff-4ch-pro"
+          }
+        ]
+      },
+      {
+        "id": "secondChannelOff",
+        "title": {
+          "en": "Second channel turn off"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=sonoff-4ch-pro"
+          }
+        ]
+      },
+      {
+        "id": "secondChannelToggle",
+        "title": {
+          "en": "Second channel turn on or off"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=sonoff-4ch-pro"
+          }
+        ]
+      }
+    ]
+  },
+  "capabilities": {
+    "RGBEffects": {
+      "type": "enum",
+      "title": {
+        "en": "RGB modes"
+      },
+      "desc": {
+        "en": "RGB modes"
+      },
+      "values": [
+        {
+          "id": "1",
+          "title": {
+            "en": "Colorful"
+          }
+        },
+        {
+          "id": "2",
+          "title": {
+            "en": "Colorful gradient"
+          }
+        },
+        {
+          "id": "3",
+          "title": {
+            "en": "Colorful breath"
+          }
+        },
+        {
+          "id": "8",
+          "title": {
+            "en": "RGB gradient"
+          }
+        },
+        {
+          "id": "9",
+          "title": {
+            "en": "RGB pulse"
+          }
+        },
+        {
+          "id": "10",
+          "title": {
+            "en": "RGB breath"
+          }
+        },
+        {
+          "id": "11",
+          "title": {
+            "en": "RGB strobe"
+          }
+        }
+      ],
+      "getable": true,
+      "setable": true
+    }
+  },
+  "api": {
+    "url": "/api/",
+    "title": {
+      "en": "API"
+    }
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "type": "enum",
+  "title": {
+    "en": "RGB modes"
+  },
+  "desc": {
+    "en": "RGB modes"
+  },
+  "values": [
+    {
+      "id": "1",
+      "title": {
+        "en": "Colorful"
+      }
+    },
+    {
+      "id": "2",
+      "title": {
+        "en": "Colorful gradient"
+      }
+    },
+    {
+      "id": "3",
+      "title": {
+        "en": "Colorful breath"
+      }
+    },
+    {
+      "id": "8",
+      "title": {
+        "en": "RGB gradient"
+      }
+    },
+    {
+      "id": "9",
+      "title": {
+        "en": "RGB pulse"
+      }
+    },
+    {
+      "id": "10",
+      "title": {
+        "en": "RGB breath"
+      }
+    },
+    {
+      "id": "11",
+      "title": {
+        "en": "RGB strobe"
+      }
+    }
+  ],
+  "getable": true,
+  "setable": true
+}

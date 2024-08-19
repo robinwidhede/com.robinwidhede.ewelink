@@ -1,0 +1,332 @@
+{
+  "id": "sonoff-th16",
+  "name": {
+    "en": "Sonoff TH16"
+  },
+  "class": "sensor",
+  "capabilities": ["onoff", "measure_temperature", "measure_humidity"],
+  "images": {
+    "large": "/drivers/sonoff-th16/assets/images/large.png",
+    "small": "/drivers/sonoff-th16/assets/images/small.png"
+  },
+  "pair": [
+    {
+      "id": "list_devices",
+      "template": "list_devices",
+      "navigation": {
+        "next": "add_devices"
+      },
+      "options": {
+        "singular": false
+      }
+    },
+    {
+      "id": "add_devices",
+      "template": "add_devices"
+    }
+  ],
+  "settings": [
+    {
+      "type": "group",
+      "label": {
+        "en": "Device information"
+      },
+      "children": [
+        {
+          "id": "brandName",
+          "type": "label",
+          "label": {
+            "en": "Brand name"
+          },
+          "value": "brand_name"
+        },
+        {
+          "id": "model",
+          "type": "label",
+          "label": {
+            "en": "Model"
+          },
+          "value": "model_name"
+        },
+        {
+          "id": "ip",
+          "type": "label",
+          "label": {
+            "en": "IP"
+          },
+          "value": "ip_address"
+        },
+        {
+          "id": "fwVersion",
+          "type": "label",
+          "label": {
+            "en": "Firmware version"
+          },
+          "value": "fw_version"
+        },
+        {
+          "id": "sensorType",
+          "type": "label",
+          "label": {
+            "en": "Sensor type"
+          },
+          "value": "sensor_type"
+        }
+      ]
+    },
+    {
+      "type": "group",
+      "label": {
+        "en": "Extra settings"
+      },
+      "children": [
+        {
+          "id": "powerResponse",
+          "type": "dropdown",
+          "value": "off",
+          "label": {
+            "en": "Power-on response"
+          },
+          "values": [
+            {
+              "id": "on",
+              "label": {
+                "en": "On"
+              }
+            },
+            {
+              "id": "off",
+              "label": {
+                "en": "Off"
+              }
+            },
+            {
+              "id": "stay",
+              "label": {
+                "en": "Resume the state before power outage"
+              }
+            }
+          ]
+        },
+        {
+          "id": "networkLed",
+          "type": "dropdown",
+          "value": "on",
+          "label": {
+            "en": "Network indicator"
+          },
+          "values": [
+            {
+              "id": "on",
+              "label": {
+                "en": "On"
+              }
+            },
+            {
+              "id": "off",
+              "label": {
+                "en": "Off"
+              }
+            }
+          ]
+        },
+        {
+          "id": "duration",
+          "type": "dropdown",
+          "value": "off",
+          "label": {
+            "en": "Duration"
+          },
+          "values": [
+            {
+              "id": "on",
+              "label": {
+                "en": "On"
+              }
+            },
+            {
+              "id": "off",
+              "label": {
+                "en": "Off"
+              }
+            }
+          ]
+        },
+        {
+          "id": "durationLimit",
+          "type": "number",
+          "label": {
+            "en": "Duration seconds"
+          },
+          "value": 0.5,
+          "min": 0.5,
+          "max": 3600
+        }
+      ]
+    },
+    {
+      "type": "group",
+      "label": {
+        "en": "Thermostat"
+      },
+      "children": [
+        {
+          "id": "thermostatMode",
+          "type": "dropdown",
+          "value": "off",
+          "label": {
+            "en": "Thermostat mode"
+          },
+          "values": [
+            {
+              "id": "temperature",
+              "label": {
+                "en": "Temperature"
+              }
+            },
+            {
+              "id": "humidity",
+              "label": {
+                "en": "Humidity"
+              }
+            },
+            {
+              "id": "normal",
+              "label": {
+                "en": "Off"
+              }
+            }
+          ]
+        },
+        {
+          "id": "targetHighTemperature",
+          "type": "number",
+          "label": {
+            "en": "High"
+          },
+          "value": 25,
+          "min": 0,
+          "max": 100
+        },
+        {
+          "id": "highTemperatureThreshold",
+          "type": "radio",
+          "label": {
+            "en": "High temperature threshold"
+          },
+          "value": "off",
+          "values": [
+            {
+              "id": "on",
+              "label": {
+                "en": "Switch on"
+              }
+            },
+            {
+              "id": "off",
+              "label": {
+                "en": "Switch off"
+              }
+            }
+          ]
+        },
+        {
+          "id": "targetLowTemperature",
+          "type": "number",
+          "label": {
+            "en": "Low"
+          },
+          "value": 20,
+          "min": 0,
+          "max": 100
+        },
+        {
+          "id": "lowTemperatureThreshold",
+          "type": "radio",
+          "label": {
+            "en": "Low temperature threshold"
+          },
+          "value": "off",
+          "values": [
+            {
+              "id": "on",
+              "label": {
+                "en": "Switch on"
+              }
+            },
+            {
+              "id": "off",
+              "label": {
+                "en": "Switch off"
+              }
+            }
+          ]
+        },
+        {
+          "id": "targetHighHumidity",
+          "type": "number",
+          "label": {
+            "en": "High"
+          },
+          "value": 40,
+          "min": 0,
+          "max": 100
+        },
+        {
+          "id": "highHumidityThreshold",
+          "type": "radio",
+          "label": {
+            "en": "High humidity threshold"
+          },
+          "value": "off",
+          "values": [
+            {
+              "id": "on",
+              "label": {
+                "en": "Switch on"
+              }
+            },
+            {
+              "id": "off",
+              "label": {
+                "en": "Switch off"
+              }
+            }
+          ]
+        },
+        {
+          "id": "targetLowHumidity",
+          "type": "number",
+          "label": {
+            "en": "Low"
+          },
+          "value": 30,
+          "min": 0,
+          "max": 100
+        },
+        {
+          "id": "lowHumidityThreshold",
+          "type": "radio",
+          "label": {
+            "en": "Low humidity threshold"
+          },
+          "value": "off",
+          "values": [
+            {
+              "id": "on",
+              "label": {
+                "en": "Switch on"
+              }
+            },
+            {
+              "id": "off",
+              "label": {
+                "en": "Switch off"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

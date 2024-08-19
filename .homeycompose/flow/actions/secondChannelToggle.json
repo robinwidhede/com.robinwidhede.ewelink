@@ -1,0 +1,13 @@
+{
+  "id": "secondChannelToggle",
+  "title": {
+    "en": "Second channel turn on or off"
+  },
+  "args": [
+    {
+      "name": "device",
+      "type": "device",
+      "filter": "driver_id=sonoff-4ch-pro"
+    }
+  ]
+}

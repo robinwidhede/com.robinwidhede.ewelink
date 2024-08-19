@@ -1,0 +1,13 @@
+{
+  "id": "long_press_switch",
+  "title": {
+    "en": "Long press switch"
+  },
+  "args": [
+    {
+      "name": "device",
+      "type": "device",
+      "filter": "driver_id=zigbee_switch"
+    }
+  ]
+}

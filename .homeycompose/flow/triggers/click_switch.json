@@ -1,0 +1,13 @@
+{
+  "id": "click_switch",
+  "title": {
+    "en": "Single click switch"
+  },
+  "args": [
+    {
+      "name": "device",
+      "type": "device",
+      "filter": "driver_id=zigbee_switch"
+    }
+  ]
+}

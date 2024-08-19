@@ -1,0 +1,3087 @@
+{
+  "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
+  "id": "com.robinwidhede.ewelink",
+  "version": "1.0.0",
+  "compatibility": ">=5.0.0",
+  "sdk": 3,
+  "platforms": [
+    "local"
+  ],
+  "name": {
+    "en": "eWeLink"
+  },
+  "description": {
+    "en": "Adds support for eWeLink (Sonoff) devices on Homey Pro (Early 2023)."
+  },
+  "category": [
+    "lights"
+  ],
+  "permissions": [],
+  "images": {
+    "small": "/assets/images/small.jpg",
+    "large": "/assets/images/large.jpg"
+  },
+  "brandColor": "#007EC8",
+  "author": {
+    "name": "Robin Widhede",
+    "email": "robinwidhede@icloud.com"
+  },
+  "api": {
+    "url": "/api/",
+    "title": {
+      "en": "API"
+    }
+  },
+  "flow": {
+    "triggers": [
+      {
+        "id": "click_switch",
+        "title": {
+          "en": "Single click switch"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=zigbee_switch"
+          }
+        ]
+      },
+      {
+        "id": "double_click_switch",
+        "title": {
+          "en": "Double click switch"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=zigbee_switch"
+          }
+        ]
+      }
+    ],
+    "actions": [
+      {
+        "id": "secondChannelOff",
+        "title": {
+          "en": "Second channel turn off"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=sonoff-4ch-pro"
+          }
+        ]
+      },
+      {
+        "id": "secondChannelOn",
+        "title": {
+          "en": "Second channel turn on"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=sonoff-4ch-pro"
+          }
+        ]
+      },
+      {
+        "id": "secondChannelToggle",
+        "title": {
+          "en": "Second channel turn on or off"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=sonoff-4ch-pro"
+          }
+        ]
+      }
+    ]
+  },
+  "drivers": [
+    {
+      "id": "abc-2.0-led",
+      "name": {
+        "en": "ABC 2.0 LED"
+      },
+      "class": "light",
+      "capabilities": [
+        "onoff",
+        "dim",
+        "light_hue",
+        "RGBEffects"
+      ],
+      "images": {
+        "large": "/drivers/abc-2.0-led/assets/images/large.png",
+        "small": "/drivers/abc-2.0-led/assets/images/small.png"
+      },
+      "pair": [
+        {
+          "id": "list_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_devices"
+          },
+          "options": {
+            "singular": false
+          }
+        },
+        {
+          "id": "add_devices",
+          "template": "add_devices"
+        }
+      ],
+      "settings": [
+        {
+          "type": "group",
+          "label": {
+            "en": "Device information"
+          },
+          "children": [
+            {
+              "id": "brandName",
+              "type": "label",
+              "label": {
+                "en": "Brand name"
+              },
+              "value": "brand_name"
+            },
+            {
+              "id": "model",
+              "type": "label",
+              "label": {
+                "en": "Model"
+              },
+              "value": "model_name"
+            },
+            {
+              "id": "ip",
+              "type": "label",
+              "label": {
+                "en": "IP"
+              },
+              "value": "ip_address"
+            },
+            {
+              "id": "fwVersion",
+              "type": "label",
+              "label": {
+                "en": "Firmware version"
+              },
+              "value": "fw_version"
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "label": {
+            "en": "Extra settings"
+          },
+          "children": [
+            {
+              "id": "powerResponse",
+              "type": "dropdown",
+              "value": "off",
+              "label": {
+                "en": "Power-on response"
+              },
+              "values": [
+                {
+                  "id": "on",
+                  "label": {
+                    "en": "On"
+                  }
+                },
+                {
+                  "id": "off",
+                  "label": {
+                    "en": "Off"
+                  }
+                },
+                {
+                  "id": "stay",
+                  "label": {
+                    "en": "Resume the state before power outage"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "RGBEffects",
+              "type": "dropdown",
+              "label": {
+                "en": "RGB Effects"
+              },
+              "value": "1",
+              "values": [
+                {
+                  "id": "1",
+                  "label": {
+                    "en": "Colorful"
+                  }
+                },
+                {
+                  "id": "2",
+                  "label": {
+                    "en": "Colorful gradient"
+                  }
+                },
+                {
+                  "id": "3",
+                  "label": {
+                    "en": "Colorful breath"
+                  }
+                },
+                {
+                  "id": "8",
+                  "label": {
+                    "en": "RGB gradient"
+                  }
+                },
+                {
+                  "id": "9",
+                  "label": {
+                    "en": "RGB pulse"
+                  }
+                },
+                {
+                  "id": "10",
+                  "label": {
+                    "en": "RGB breath"
+                  }
+                },
+                {
+                  "id": "11",
+                  "label": {
+                    "en": "RGB strobe"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "circuit-breaker-zjsb9",
+      "name": {
+        "en": "Circuit Breaker"
+      },
+      "class": "light",
+      "capabilities": [
+        "onoff"
+      ],
+      "images": {
+        "large": "/drivers/circuit-breaker-zjsb9/assets/images/large.png",
+        "small": "/drivers/circuit-breaker-zjsb9/assets/images/small.png"
+      },
+      "pair": [
+        {
+          "id": "list_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_devices"
+          },
+          "options": {
+            "singular": false
+          }
+        },
+        {
+          "id": "add_devices",
+          "template": "add_devices"
+        }
+      ],
+      "settings": [
+        {
+          "type": "group",
+          "label": {
+            "en": "Device information"
+          },
+          "children": [
+            {
+              "id": "brandName",
+              "type": "label",
+              "label": {
+                "en": "Brand name"
+              },
+              "value": "brand_name"
+            },
+            {
+              "id": "model",
+              "type": "label",
+              "label": {
+                "en": "Model"
+              },
+              "value": "model_name"
+            },
+            {
+              "id": "ip",
+              "type": "label",
+              "label": {
+                "en": "IP"
+              },
+              "value": "ip_address"
+            },
+            {
+              "id": "mac",
+              "type": "label",
+              "label": {
+                "en": "MAC"
+              },
+              "value": "mac_address"
+            },
+            {
+              "id": "fwVersion",
+              "type": "label",
+              "label": {
+                "en": "Firmware version"
+              },
+              "value": "fw_version"
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "label": {
+            "en": "Extra settings"
+          },
+          "children": [
+            {
+              "id": "powerResponse",
+              "type": "dropdown",
+              "value": "off",
+              "label": {
+                "en": "Power-on response"
+              },
+              "values": [
+                {
+                  "id": "on",
+                  "label": {
+                    "en": "On"
+                  }
+                },
+                {
+                  "id": "off",
+                  "label": {
+                    "en": "Off"
+                  }
+                },
+                {
+                  "id": "stay",
+                  "label": {
+                    "en": "Resume the state before power outage"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "networkLed",
+              "type": "dropdown",
+              "value": "on",
+              "label": {
+                "en": "Network indicator"
+              },
+              "values": [
+                {
+                  "id": "on",
+                  "label": {
+                    "en": "On"
+                  }
+                },
+                {
+                  "id": "off",
+                  "label": {
+                    "en": "Off"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "duration",
+              "type": "dropdown",
+              "value": "off",
+              "label": {
+                "en": "Duration"
+              },
+              "values": [
+                {
+                  "id": "on",
+                  "label": {
+                    "en": "On"
+                  }
+                },
+                {
+                  "id": "off",
+                  "label": {
+                    "en": "Off"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "durationLimit",
+              "type": "number",
+              "label": {
+                "en": "Duration seconds"
+              },
+              "value": 0.5,
+              "min": 0.5,
+              "max": 3600
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "coolkit-outdoor-socket",
+      "name": {
+        "en": "Coolkit Outdoor Socket"
+      },
+      "class": "socket",
+      "capabilities": [
+        "onoff"
+      ],
+      "images": {
+        "large": "/drivers/coolkit-outdoor-socket/assets/images/large.png",
+        "small": "/drivers/coolkit-outdoor-socket/assets/images/small.png"
+      },
+      "pair": [
+        {
+          "id": "list_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_devices"
+          },
+          "options": {
+            "singular": false
+          }
+        },
+        {
+          "id": "add_devices",
+          "template": "add_devices"
+        }
+      ],
+      "settings": [
+        {
+          "type": "group",
+          "label": {
+            "en": "Device information"
+          },
+          "children": [
+            {
+              "id": "brandName",
+              "type": "label",
+              "label": {
+                "en": "Brand name"
+              },
+              "value": "brand_name"
+            },
+            {
+              "id": "model",
+              "type": "label",
+              "label": {
+                "en": "Model"
+              },
+              "value": "model_name"
+            },
+            {
+              "id": "ip",
+              "type": "label",
+              "label": {
+                "en": "IP"
+              },
+              "value": "ip_address"
+            },
+            {
+              "id": "fwVersion",
+              "type": "label",
+              "label": {
+                "en": "Firmware version"
+              },
+              "value": "fw_version"
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "label": {
+            "en": "Extra settings"
+          },
+          "children": [
+            {
+              "id": "powerResponse",
+              "type": "dropdown",
+              "value": "off",
+              "label": {
+                "en": "Power-on response"
+              },
+              "values": [
+                {
+                  "id": "on",
+                  "label": {
+                    "en": "On"
+                  }
+                },
+                {
+                  "id": "off",
+                  "label": {
+                    "en": "Off"
+                  }
+                },
+                {
+                  "id": "stay",
+                  "label": {
+                    "en": "Resume the state before power outage"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "networkLed",
+              "type": "dropdown",
+              "value": "on",
+              "label": {
+                "en": "Network indicator"
+              },
+              "values": [
+                {
+                  "id": "on",
+                  "label": {
+                    "en": "On"
+                  }
+                },
+                {
+                  "id": "off",
+                  "label": {
+                    "en": "Off"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "duration",
+              "type": "dropdown",
+              "value": "off",
+              "label": {
+                "en": "Duration"
+              },
+              "values": [
+                {
+                  "id": "on",
+                  "label": {
+                    "en": "On"
+                  }
+                },
+                {
+                  "id": "off",
+                  "label": {
+                    "en": "Off"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "durationLimit",
+              "type": "number",
+              "label": {
+                "en": "Duration seconds"
+              },
+              "value": 0.5,
+              "min": 0.5,
+              "max": 3600
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "coolkit-socket",
+      "name": {
+        "en": "Coolkit Socket"
+      },
+      "class": "socket",
+      "capabilities": [
+        "onoff",
+        "measure_power",
+        "meter_power",
+        "measure_voltage"
+      ],
+      "images": {
+        "large": "/drivers/coolkit-socket/assets/images/large.png",
+        "small": "/drivers/coolkit-socket/assets/images/small.png"
+      },
+      "pair": [
+        {
+          "id": "list_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_devices"
+          },
+          "options": {
+            "singular": false
+          }
+        },
+        {
+          "id": "add_devices",
+          "template": "add_devices"
+        }
+      ],
+      "settings": [
+        {
+          "type": "group",
+          "label": {
+            "en": "Device information"
+          },
+          "children": [
+            {
+              "id": "brandName",
+              "type": "label",
+              "label": {
+                "en": "Brand name"
+              },
+              "value": "brand_name"
+            },
+            {
+              "id": "model",
+              "type": "label",
+              "label": {
+                "en": "Model"
+              },
+              "value": "model_name"
+            },
+            {
+              "id": "ip",
+              "type": "label",
+              "label": {
+                "en": "IP"
+              },
+              "value": "ip_address"
+            },
+            {
+              "id": "fwVersion",
+              "type": "label",
+              "label": {
+                "en": "Firmware version"
+              },
+              "value": "fw_version"
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "label": {
+            "en": "Extra settings"
+          },
+          "children": [
+            {
+              "id": "powerResponse",
+              "type": "dropdown",
+              "value": "off",
+              "label": {
+                "en": "Power-on response"
+              },
+              "values": [
+                {
+                  "id": "on",
+                  "label": {
+                    "en": "On"
+                  }
+                },
+                {
+                  "id": "off",
+                  "label": {
+                    "en": "Off"
+                  }
+                },
+                {
+                  "id": "stay",
+                  "label": {
+                    "en": "Resume the state before power outage"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "networkLed",
+              "type": "dropdown",
+              "value": "on",
+              "label": {
+                "en": "Network indicator"
+              },
+              "values": [
+                {
+                  "id": "on",
+                  "label": {
+                    "en": "On"
+                  }
+                },
+                {
+                  "id": "off",
+                  "label": {
+                    "en": "Off"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "duration",
+              "type": "dropdown",
+              "value": "off",
+              "label": {
+                "en": "Duration"
+              },
+              "values": [
+                {
+                  "id": "on",
+                  "label": {
+                    "en": "On"
+                  }
+                },
+                {
+                  "id": "off",
+                  "label": {
+                    "en": "Off"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "durationLimit",
+              "type": "number",
+              "label": {
+                "en": "Duration seconds"
+              },
+              "value": 0.5,
+              "min": 0.5,
+              "max": 3600
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "generic",
+      "name": {
+        "en": "Generic devices"
+      },
+      "class": "socket",
+      "capabilities": [
+        "onoff"
+      ],
+      "images": {
+        "large": "/drivers/generic/assets/images/large.png",
+        "small": "/drivers/generic/assets/images/small.png"
+      },
+      "pair": [
+        {
+          "id": "list_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_devices"
+          },
+          "options": {
+            "singular": false
+          }
+        },
+        {
+          "id": "add_devices",
+          "template": "add_devices"
+        }
+      ],
+      "settings": [
+        {
+          "type": "group",
+          "label": {
+            "en": "Device information"
+          },
+          "children": [
+            {
+              "id": "brandName",
+              "type": "label",
+              "label": {
+                "en": "Brand name"
+              },
+              "value": "brand_name"
+            },
+            {
+              "id": "model",
+              "type": "label",
+              "label": {
+                "en": "Model"
+              },
+              "value": "model_name"
+            },
+            {
+              "id": "ip",
+              "type": "label",
+              "label": {
+                "en": "IP"
+              },
+              "value": "ip_address"
+            },
+            {
+              "id": "fwVersion",
+              "type": "label",
+              "label": {
+                "en": "Firmware version"
+              },
+              "value": "fw_version"
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "label": {
+            "en": "Extra settings"
+          },
+          "children": [
+            {
+              "id": "powerResponse",
+              "type": "dropdown",
+              "value": "off",
+              "label": {
+                "en": "Power-on response"
+              },
+              "values": [
+                {
+                  "id": "on",
+                  "label": {
+                    "en": "On"
+                  }
+                },
+                {
+                  "id": "off",
+                  "label": {
+                    "en": "Off"
+                  }
+                },
+                {
+                  "id": "stay",
+                  "label": {
+                    "en": "Resume the state before power outage"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sonoff-4ch-pro",
+      "name": {
+        "en": "Sonoff 4CH Pro"
+      },
+      "class": "light",
+      "capabilities": [
+        "onoff",
+        "onoff.1",
+        "onoff.2",
+        "onoff.3"
+      ],
+      "capabilitiesOptions": {
+        "onoff": {
+          "title": {
+            "en": "1 channel"
+          }
+        },
+        "onoff.1": {
+          "title": {
+            "en": "2 channel"
+          }
+        },
+        "onoff.2": {
+          "title": {
+            "en": "3 channel"
+          }
+        },
+        "onoff.3": {
+          "title": {
+            "en": "4 channel"
+          }
+        }
+      },
+      "images": {
+        "large": "/drivers/sonoff-4ch-pro/assets/images/large.png",
+        "small": "/drivers/sonoff-4ch-pro/assets/images/small.png"
+      },
+      "pair": [
+        {
+          "id": "list_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_devices"
+          },
+          "options": {
+            "singular": false
+          }
+        },
+        {
+          "id": "add_devices",
+          "template": "add_devices"
+        }
+      ],
+      "settings": [
+        {
+          "type": "group",
+          "label": {
+            "en": "Device information"
+          },
+          "children": [
+            {
+              "id": "brandName",
+              "type": "label",
+              "label": {
+                "en": "Brand name"
+              },
+              "value": "brand_name"
+            },
+            {
+              "id": "model",
+              "type": "label",
+              "label": {
+                "en": "Model"
+              },
+              "value": "model_name"
+            },
+            {
+              "id": "ip",
+              "type": "label",
+              "label": {
+                "en": "IP"
+              },
+              "value": "ip_address"
+            },
+            {
+              "id": "fwVersion",
+              "type": "label",
+              "label": {
+                "en": "Firmware version"
+              },
+              "value": "fw_version"
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "label": {
+            "en": "Extra settings"
+          },
+          "children": [
+            {
+              "id": "powerResponse",
+              "type": "dropdown",
+              "value": "off",
+              "label": {
+                "en": "Power-on response"
+              },
+              "values": [
+                {
+                  "id": "on",
+                  "label": {
+                    "en": "On"
+                  }
+                },
+                {
+                  "id": "off",
+                  "label": {
+                    "en": "Off"
+                  }
+                },
+                {
+                  "id": "stay",
+                  "label": {
+                    "en": "Resume the state before power outage"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "networkLed",
+              "type": "dropdown",
+              "value": "on",
+              "label": {
+                "en": "Network indicator"
+              },
+              "values": [
+                {
+                  "id": "on",
+                  "label": {
+                    "en": "On"
+                  }
+                },
+                {
+                  "id": "off",
+                  "label": {
+                    "en": "Off"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "duration1channel",
+              "type": "dropdown",
+              "value": "off",
+              "label": {
+                "en": "Duration 1 channel"
+              },
+              "values": [
+                {
+                  "id": "on",
+                  "label": {
+                    "en": "On"
+                  }
+                },
+                {
+                  "id": "off",
+                  "label": {
+                    "en": "Off"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "durationLimit1channel",
+              "type": "number",
+              "label": {
+                "en": "Duration seconds"
+              },
+              "value": 0.5,
+              "min": 0.5,
+              "max": 3600
+            },
+            {
+              "id": "duration2channel",
+              "type": "dropdown",
+              "value": "off",
+              "label": {
+                "en": "Duration 2 channel"
+              },
+              "values": [
+                {
+                  "id": "on",
+                  "label": {
+                    "en": "On"
+                  }
+                },
+                {
+                  "id": "off",
+                  "label": {
+                    "en": "Off"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "durationLimit2channel",
+              "type": "number",
+              "label": {
+                "en": "Duration seconds"
+              },
+              "value": 0.5,
+              "min": 0.5,
+              "max": 3600
+            },
+            {
+              "id": "duration3channel",
+              "type": "dropdown",
+              "value": "off",
+              "label": {
+                "en": "Duration 3 channel"
+              },
+              "values": [
+                {
+                  "id": "on",
+                  "label": {
+                    "en": "On"
+                  }
+                },
+                {
+                  "id": "off",
+                  "label": {
+                    "en": "Off"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "durationLimit3channel",
+              "type": "number",
+              "label": {
+                "en": "Duration seconds"
+              },
+              "value": 0.5,
+              "min": 0.5,
+              "max": 3600
+            },
+            {
+              "id": "duration4channel",
+              "type": "dropdown",
+              "value": "off",
+              "label": {
+                "en": "Duration 4 channel"
+              },
+              "values": [
+                {
+                  "id": "on",
+                  "label": {
+                    "en": "On"
+                  }
+                },
+                {
+                  "id": "off",
+                  "label": {
+                    "en": "Off"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "durationLimit4channel",
+              "type": "number",
+              "label": {
+                "en": "Duration seconds"
+              },
+              "value": 0.5,
+              "min": 0.5,
+              "max": 3600
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sonoff-basic",
+      "name": {
+        "en": "Sonoff Basic / Basic 2"
+      },
+      "class": "light",
+      "capabilities": [
+        "onoff"
+      ],
+      "images": {
+        "large": "/drivers/sonoff-basic/assets/images/large.png",
+        "small": "/drivers/sonoff-basic/assets/images/small.png"
+      },
+      "pair": [
+        {
+          "id": "list_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_devices"
+          },
+          "options": {
+            "singular": false
+          }
+        },
+        {
+          "id": "add_devices",
+          "template": "add_devices"
+        }
+      ],
+      "settings": [
+        {
+          "type": "group",
+          "label": {
+            "en": "Device information"
+          },
+          "children": [
+            {
+              "id": "brandName",
+              "type": "label",
+              "label": {
+                "en": "Brand name"
+              },
+              "value": "brand_name"
+            },
+            {
+              "id": "model",
+              "type": "label",
+              "label": {
+                "en": "Model"
+              },
+              "value": "model_name"
+            },
+            {
+              "id": "ip",
+              "type": "label",
+              "label": {
+                "en": "IP"
+              },
+              "value": "ip_address"
+            },
+            {
+              "id": "fwVersion",
+              "type": "label",
+              "label": {
+                "en": "Firmware version"
+              },
+              "value": "fw_version"
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "label": {
+            "en": "Extra settings"
+          },
+          "children": [
+            {
+              "id": "powerResponse",
+              "type": "dropdown",
+              "value": "off",
+              "label": {
+                "en": "Power-on response"
+              },
+              "values": [
+                {
+                  "id": "on",
+                  "label": {
+                    "en": "On"
+                  }
+                },
+                {
+                  "id": "off",
+                  "label": {
+                    "en": "Off"
+                  }
+                },
+                {
+                  "id": "stay",
+                  "label": {
+                    "en": "Resume the state before power outage"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "networkLed",
+              "type": "dropdown",
+              "value": "on",
+              "label": {
+                "en": "Network indicator"
+              },
+              "values": [
+                {
+                  "id": "on",
+                  "label": {
+                    "en": "On"
+                  }
+                },
+                {
+                  "id": "off",
+                  "label": {
+                    "en": "Off"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "duration",
+              "type": "dropdown",
+              "value": "off",
+              "label": {
+                "en": "Duration"
+              },
+              "values": [
+                {
+                  "id": "on",
+                  "label": {
+                    "en": "On"
+                  }
+                },
+                {
+                  "id": "off",
+                  "label": {
+                    "en": "Off"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "durationLimit",
+              "type": "number",
+              "label": {
+                "en": "Duration seconds"
+              },
+              "value": 0.5,
+              "min": 0.5,
+              "max": 3600
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sonoff-g1-gsm",
+      "name": {
+        "en": "Sonoff G1 GSM"
+      },
+      "class": "socket",
+      "capabilities": [
+        "onoff"
+      ],
+      "images": {
+        "large": "/drivers/sonoff-g1-gsm/assets/images/large.png",
+        "small": "/drivers/sonoff-g1-gsm/assets/images/small.png"
+      },
+      "pair": [
+        {
+          "id": "list_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_devices"
+          },
+          "options": {
+            "singular": false
+          }
+        },
+        {
+          "id": "add_devices",
+          "template": "add_devices"
+        }
+      ],
+      "settings": [
+        {
+          "type": "group",
+          "label": {
+            "en": "Device information"
+          },
+          "children": [
+            {
+              "id": "brandName",
+              "type": "label",
+              "label": {
+                "en": "Brand name"
+              },
+              "value": "brand_name"
+            },
+            {
+              "id": "model",
+              "type": "label",
+              "label": {
+                "en": "Model"
+              },
+              "value": "model_name"
+            },
+            {
+              "id": "ip",
+              "type": "label",
+              "label": {
+                "en": "IP"
+              },
+              "value": "ip_address"
+            },
+            {
+              "id": "fwVersion",
+              "type": "label",
+              "label": {
+                "en": "Firmware version"
+              },
+              "value": "fw_version"
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "label": {
+            "en": "Extra settings"
+          },
+          "children": [
+            {
+              "id": "powerResponse",
+              "type": "dropdown",
+              "value": "off",
+              "label": {
+                "en": "Power-on response"
+              },
+              "values": [
+                {
+                  "id": "on",
+                  "label": {
+                    "en": "On"
+                  }
+                },
+                {
+                  "id": "off",
+                  "label": {
+                    "en": "Off"
+                  }
+                },
+                {
+                  "id": "stay",
+                  "label": {
+                    "en": "Resume the state before power outage"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "networkLed",
+              "type": "dropdown",
+              "value": "on",
+              "label": {
+                "en": "Network indicator"
+              },
+              "values": [
+                {
+                  "id": "on",
+                  "label": {
+                    "en": "On"
+                  }
+                },
+                {
+                  "id": "off",
+                  "label": {
+                    "en": "Off"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "duration",
+              "type": "dropdown",
+              "value": "off",
+              "label": {
+                "en": "Duration"
+              },
+              "values": [
+                {
+                  "id": "on",
+                  "label": {
+                    "en": "On"
+                  }
+                },
+                {
+                  "id": "off",
+                  "label": {
+                    "en": "Off"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "durationLimit",
+              "type": "number",
+              "label": {
+                "en": "Duration seconds"
+              },
+              "value": 0.5,
+              "min": 0.5,
+              "max": 3600
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sonoff-mini",
+      "name": {
+        "en": "Sonoff Mini"
+      },
+      "class": "socket",
+      "capabilities": [
+        "onoff"
+      ],
+      "images": {
+        "large": "/drivers/sonoff-mini/assets/images/large.png",
+        "small": "/drivers/sonoff-mini/assets/images/small.png"
+      },
+      "pair": [
+        {
+          "id": "list_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_devices"
+          },
+          "options": {
+            "singular": false
+          }
+        },
+        {
+          "id": "add_devices",
+          "template": "add_devices"
+        }
+      ],
+      "settings": [
+        {
+          "type": "group",
+          "label": {
+            "en": "Device information"
+          },
+          "children": [
+            {
+              "id": "brandName",
+              "type": "label",
+              "label": {
+                "en": "Brand name"
+              },
+              "value": "brand_name"
+            },
+            {
+              "id": "model",
+              "type": "label",
+              "label": {
+                "en": "Model"
+              },
+              "value": "model_name"
+            },
+            {
+              "id": "ip",
+              "type": "label",
+              "label": {
+                "en": "IP"
+              },
+              "value": "ip_address"
+            },
+            {
+              "id": "fwVersion",
+              "type": "label",
+              "label": {
+                "en": "Firmware version"
+              },
+              "value": "fw_version"
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "label": {
+            "en": "Extra settings"
+          },
+          "children": [
+            {
+              "id": "powerResponse",
+              "type": "dropdown",
+              "value": "off",
+              "label": {
+                "en": "Power-on response"
+              },
+              "values": [
+                {
+                  "id": "on",
+                  "label": {
+                    "en": "On"
+                  }
+                },
+                {
+                  "id": "off",
+                  "label": {
+                    "en": "Off"
+                  }
+                },
+                {
+                  "id": "stay",
+                  "label": {
+                    "en": "Resume the state before power outage"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "networkLed",
+              "type": "dropdown",
+              "value": "on",
+              "label": {
+                "en": "Network indicator"
+              },
+              "values": [
+                {
+                  "id": "on",
+                  "label": {
+                    "en": "On"
+                  }
+                },
+                {
+                  "id": "off",
+                  "label": {
+                    "en": "Off"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "duration",
+              "type": "dropdown",
+              "value": "off",
+              "label": {
+                "en": "Duration"
+              },
+              "values": [
+                {
+                  "id": "on",
+                  "label": {
+                    "en": "On"
+                  }
+                },
+                {
+                  "id": "off",
+                  "label": {
+                    "en": "Off"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "durationLimit",
+              "type": "number",
+              "label": {
+                "en": "Duration seconds"
+              },
+              "value": 0.5,
+              "min": 0.5,
+              "max": 3600
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sonoff-pow",
+      "name": {
+        "en": "Sonoff Pow"
+      },
+      "class": "socket",
+      "capabilities": [
+        "onoff",
+        "measure_power"
+      ],
+      "images": {
+        "large": "/drivers/sonoff-pow/assets/images/large.png",
+        "small": "/drivers/sonoff-pow/assets/images/small.png"
+      },
+      "pair": [
+        {
+          "id": "list_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_devices"
+          },
+          "options": {
+            "singular": false
+          }
+        },
+        {
+          "id": "add_devices",
+          "template": "add_devices"
+        }
+      ],
+      "settings": [
+        {
+          "type": "group",
+          "label": {
+            "en": "Device information"
+          },
+          "children": [
+            {
+              "id": "brandName",
+              "type": "label",
+              "label": {
+                "en": "Brand name"
+              },
+              "value": "brand_name"
+            },
+            {
+              "id": "model",
+              "type": "label",
+              "label": {
+                "en": "Model"
+              },
+              "value": "model_name"
+            },
+            {
+              "id": "ip",
+              "type": "label",
+              "label": {
+                "en": "IP"
+              },
+              "value": "ip_address"
+            },
+            {
+              "id": "fwVersion",
+              "type": "label",
+              "label": {
+                "en": "Firmware version"
+              },
+              "value": "fw_version"
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "label": {
+            "en": "Extra settings"
+          },
+          "children": [
+            {
+              "id": "powerResponse",
+              "type": "dropdown",
+              "value": "off",
+              "label": {
+                "en": "Power-on response"
+              },
+              "values": [
+                {
+                  "id": "on",
+                  "label": {
+                    "en": "On"
+                  }
+                },
+                {
+                  "id": "off",
+                  "label": {
+                    "en": "Off"
+                  }
+                },
+                {
+                  "id": "stay",
+                  "label": {
+                    "en": "Resume the state before power outage"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "networkLed",
+              "type": "dropdown",
+              "value": "on",
+              "label": {
+                "en": "Network indicator"
+              },
+              "values": [
+                {
+                  "id": "on",
+                  "label": {
+                    "en": "On"
+                  }
+                },
+                {
+                  "id": "off",
+                  "label": {
+                    "en": "Off"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "duration",
+              "type": "dropdown",
+              "value": "off",
+              "label": {
+                "en": "Duration"
+              },
+              "values": [
+                {
+                  "id": "on",
+                  "label": {
+                    "en": "On"
+                  }
+                },
+                {
+                  "id": "off",
+                  "label": {
+                    "en": "Off"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "durationLimit",
+              "type": "number",
+              "label": {
+                "en": "Duration seconds"
+              },
+              "value": 0.5,
+              "min": 0.5,
+              "max": 3600
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sonoff-s20",
+      "name": {
+        "en": "Sonoff S20 / S26 (R1)"
+      },
+      "class": "socket",
+      "capabilities": [
+        "onoff"
+      ],
+      "images": {
+        "large": "/drivers/sonoff-s20/assets/images/large.png",
+        "small": "/drivers/sonoff-s20/assets/images/small.png"
+      },
+      "pair": [
+        {
+          "id": "list_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_devices"
+          },
+          "options": {
+            "singular": false
+          }
+        },
+        {
+          "id": "add_devices",
+          "template": "add_devices"
+        }
+      ],
+      "settings": [
+        {
+          "type": "group",
+          "label": {
+            "en": "Device information"
+          },
+          "children": [
+            {
+              "id": "brandName",
+              "type": "label",
+              "label": {
+                "en": "Brand name"
+              },
+              "value": "brand_name"
+            },
+            {
+              "id": "model",
+              "type": "label",
+              "label": {
+                "en": "Model"
+              },
+              "value": "model_name"
+            },
+            {
+              "id": "ip",
+              "type": "label",
+              "label": {
+                "en": "IP"
+              },
+              "value": "ip_address"
+            },
+            {
+              "id": "fwVersion",
+              "type": "label",
+              "label": {
+                "en": "Firmware version"
+              },
+              "value": "fw_version"
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "label": {
+            "en": "Extra settings"
+          },
+          "children": [
+            {
+              "id": "powerResponse",
+              "type": "dropdown",
+              "value": "off",
+              "label": {
+                "en": "Power-on response"
+              },
+              "values": [
+                {
+                  "id": "on",
+                  "label": {
+                    "en": "On"
+                  }
+                },
+                {
+                  "id": "off",
+                  "label": {
+                    "en": "Off"
+                  }
+                },
+                {
+                  "id": "stay",
+                  "label": {
+                    "en": "Resume the state before power outage"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "networkLed",
+              "type": "dropdown",
+              "value": "on",
+              "label": {
+                "en": "Network indicator"
+              },
+              "values": [
+                {
+                  "id": "on",
+                  "label": {
+                    "en": "On"
+                  }
+                },
+                {
+                  "id": "off",
+                  "label": {
+                    "en": "Off"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "duration",
+              "type": "dropdown",
+              "value": "off",
+              "label": {
+                "en": "Duration"
+              },
+              "values": [
+                {
+                  "id": "on",
+                  "label": {
+                    "en": "On"
+                  }
+                },
+                {
+                  "id": "off",
+                  "label": {
+                    "en": "Off"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "durationLimit",
+              "type": "number",
+              "label": {
+                "en": "Duration seconds"
+              },
+              "value": 0.5,
+              "min": 0.5,
+              "max": 3600
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sonoff-sc",
+      "name": {
+        "en": "Sonoff SC"
+      },
+      "class": "sensor",
+      "capabilities": [
+        "measure_pm25",
+        "measure_humidity",
+        "measure_luminance",
+        "measure_noise",
+        "measure_temperature"
+      ],
+      "images": {
+        "large": "/drivers/sonoff-sc/assets/images/large.png",
+        "small": "/drivers/sonoff-sc/assets/images/small.png"
+      },
+      "pair": [
+        {
+          "id": "list_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_devices"
+          },
+          "options": {
+            "singular": false
+          }
+        },
+        {
+          "id": "add_devices",
+          "template": "add_devices"
+        }
+      ],
+      "settings": [
+        {
+          "type": "group",
+          "label": {
+            "en": "Device information"
+          },
+          "children": [
+            {
+              "id": "brandName",
+              "type": "label",
+              "label": {
+                "en": "Brand name"
+              },
+              "value": "brand_name"
+            },
+            {
+              "id": "model",
+              "type": "label",
+              "label": {
+                "en": "Model"
+              },
+              "value": "model_name"
+            },
+            {
+              "id": "ip",
+              "type": "label",
+              "label": {
+                "en": "IP"
+              },
+              "value": "ip_address"
+            },
+            {
+              "id": "fwVersion",
+              "type": "label",
+              "label": {
+                "en": "Firmware version"
+              },
+              "value": "fw_version"
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "label": {
+            "en": "Extra settings"
+          },
+          "children": [
+            {
+              "id": "powerResponse",
+              "type": "dropdown",
+              "value": "off",
+              "label": {
+                "en": "Power-on response"
+              },
+              "values": [
+                {
+                  "id": "on",
+                  "label": {
+                    "en": "On"
+                  }
+                },
+                {
+                  "id": "off",
+                  "label": {
+                    "en": "Off"
+                  }
+                },
+                {
+                  "id": "stay",
+                  "label": {
+                    "en": "Resume the state before power outage"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "networkLed",
+              "type": "dropdown",
+              "value": "on",
+              "label": {
+                "en": "Network indicator"
+              },
+              "values": [
+                {
+                  "id": "on",
+                  "label": {
+                    "en": "On"
+                  }
+                },
+                {
+                  "id": "off",
+                  "label": {
+                    "en": "Off"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "duration",
+              "type": "dropdown",
+              "value": "off",
+              "label": {
+                "en": "Duration"
+              },
+              "values": [
+                {
+                  "id": "on",
+                  "label": {
+                    "en": "On"
+                  }
+                },
+                {
+                  "id": "off",
+                  "label": {
+                    "en": "Off"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "durationLimit",
+              "type": "number",
+              "label": {
+                "en": "Duration seconds"
+              },
+              "value": 0.5,
+              "min": 0.5,
+              "max": 3600
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sonoff-t1-2c",
+      "name": {
+        "en": "Sonoff T1 2C"
+      },
+      "class": "light",
+      "capabilities": [
+        "onoff",
+        "onoff.1"
+      ],
+      "capabilitiesOptions": {
+        "onoff": {
+          "title": {
+            "en": "1 channel"
+          }
+        },
+        "onoff.1": {
+          "title": {
+            "en": "2 channel"
+          }
+        }
+      },
+      "images": {
+        "large": "/drivers/sonoff-t1-2c/assets/images/large.png",
+        "small": "/drivers/sonoff-t1-2c/assets/images/small.png"
+      },
+      "pair": [
+        {
+          "id": "list_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_devices"
+          },
+          "options": {
+            "singular": false
+          }
+        },
+        {
+          "id": "add_devices",
+          "template": "add_devices"
+        }
+      ],
+      "settings": [
+        {
+          "type": "group",
+          "label": {
+            "en": "Device information"
+          },
+          "children": [
+            {
+              "id": "brandName",
+              "type": "label",
+              "label": {
+                "en": "Brand name"
+              },
+              "value": "brand_name"
+            },
+            {
+              "id": "model",
+              "type": "label",
+              "label": {
+                "en": "Model"
+              },
+              "value": "model_name"
+            },
+            {
+              "id": "ip",
+              "type": "label",
+              "label": {
+                "en": "IP"
+              },
+              "value": "ip_address"
+            },
+            {
+              "id": "mac",
+              "type": "label",
+              "label": {
+                "en": "MAC"
+              },
+              "value": "mac_address"
+            },
+            {
+              "id": "fwVersion",
+              "type": "label",
+              "label": {
+                "en": "Firmware version"
+              },
+              "value": "fw_version"
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "label": {
+            "en": "Extra settings"
+          },
+          "children": [
+            {
+              "id": "powerResponse",
+              "type": "dropdown",
+              "value": "off",
+              "label": {
+                "en": "Power-on response"
+              },
+              "values": [
+                {
+                  "id": "on",
+                  "label": {
+                    "en": "On"
+                  }
+                },
+                {
+                  "id": "off",
+                  "label": {
+                    "en": "Off"
+                  }
+                },
+                {
+                  "id": "stay",
+                  "label": {
+                    "en": "Resume the state before power outage"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "networkLed",
+              "type": "dropdown",
+              "value": "on",
+              "label": {
+                "en": "Network indicator"
+              },
+              "values": [
+                {
+                  "id": "on",
+                  "label": {
+                    "en": "On"
+                  }
+                },
+                {
+                  "id": "off",
+                  "label": {
+                    "en": "Off"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "duration",
+              "type": "dropdown",
+              "value": "off",
+              "label": {
+                "en": "Duration"
+              },
+              "values": [
+                {
+                  "id": "on",
+                  "label": {
+                    "en": "On"
+                  }
+                },
+                {
+                  "id": "off",
+                  "label": {
+                    "en": "Off"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "durationLimit",
+              "type": "number",
+              "label": {
+                "en": "Duration seconds"
+              },
+              "value": 0.5,
+              "min": 0.5,
+              "max": 3600
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sonoff-t4-1c",
+      "name": {
+        "en": "Sonoff T4EU1C"
+      },
+      "class": "light",
+      "capabilities": [
+        "onoff"
+      ],
+      "images": {
+        "large": "/drivers/sonoff-t4-1c/assets/images/large.png",
+        "small": "/drivers/sonoff-t4-1c/assets/images/small.png"
+      },
+      "pair": [
+        {
+          "id": "list_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_devices"
+          },
+          "options": {
+            "singular": false
+          }
+        },
+        {
+          "id": "add_devices",
+          "template": "add_devices"
+        }
+      ],
+      "settings": [
+        {
+          "type": "group",
+          "label": {
+            "en": "Device information"
+          },
+          "children": [
+            {
+              "id": "brandName",
+              "type": "label",
+              "label": {
+                "en": "Brand name"
+              },
+              "value": "brand_name"
+            },
+            {
+              "id": "model",
+              "type": "label",
+              "label": {
+                "en": "Model"
+              },
+              "value": "model_name"
+            },
+            {
+              "id": "ip",
+              "type": "label",
+              "label": {
+                "en": "IP"
+              },
+              "value": "ip_address"
+            },
+            {
+              "id": "fwVersion",
+              "type": "label",
+              "label": {
+                "en": "Firmware version"
+              },
+              "value": "fw_version"
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "label": {
+            "en": "Extra settings"
+          },
+          "children": [
+            {
+              "id": "powerResponse",
+              "type": "dropdown",
+              "value": "off",
+              "label": {
+                "en": "Power-on response"
+              },
+              "values": [
+                {
+                  "id": "on",
+                  "label": {
+                    "en": "On"
+                  }
+                },
+                {
+                  "id": "off",
+                  "label": {
+                    "en": "Off"
+                  }
+                },
+                {
+                  "id": "stay",
+                  "label": {
+                    "en": "Resume the state before power outage"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "networkLed",
+              "type": "dropdown",
+              "value": "on",
+              "label": {
+                "en": "Network indicator"
+              },
+              "values": [
+                {
+                  "id": "on",
+                  "label": {
+                    "en": "On"
+                  }
+                },
+                {
+                  "id": "off",
+                  "label": {
+                    "en": "Off"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "duration",
+              "type": "dropdown",
+              "value": "off",
+              "label": {
+                "en": "Duration"
+              },
+              "values": [
+                {
+                  "id": "on",
+                  "label": {
+                    "en": "On"
+                  }
+                },
+                {
+                  "id": "off",
+                  "label": {
+                    "en": "Off"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "durationLimit",
+              "type": "number",
+              "label": {
+                "en": "Duration seconds"
+              },
+              "value": 0.5,
+              "min": 0.5,
+              "max": 3600
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sonoff-th16",
+      "name": {
+        "en": "Sonoff TH16"
+      },
+      "class": "sensor",
+      "capabilities": [
+        "onoff",
+        "measure_temperature",
+        "measure_humidity"
+      ],
+      "images": {
+        "large": "/drivers/sonoff-th16/assets/images/large.png",
+        "small": "/drivers/sonoff-th16/assets/images/small.png"
+      },
+      "pair": [
+        {
+          "id": "list_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_devices"
+          },
+          "options": {
+            "singular": false
+          }
+        },
+        {
+          "id": "add_devices",
+          "template": "add_devices"
+        }
+      ],
+      "settings": [
+        {
+          "type": "group",
+          "label": {
+            "en": "Device information"
+          },
+          "children": [
+            {
+              "id": "brandName",
+              "type": "label",
+              "label": {
+                "en": "Brand name"
+              },
+              "value": "brand_name"
+            },
+            {
+              "id": "model",
+              "type": "label",
+              "label": {
+                "en": "Model"
+              },
+              "value": "model_name"
+            },
+            {
+              "id": "ip",
+              "type": "label",
+              "label": {
+                "en": "IP"
+              },
+              "value": "ip_address"
+            },
+            {
+              "id": "fwVersion",
+              "type": "label",
+              "label": {
+                "en": "Firmware version"
+              },
+              "value": "fw_version"
+            },
+            {
+              "id": "sensorType",
+              "type": "label",
+              "label": {
+                "en": "Sensor type"
+              },
+              "value": "sensor_type"
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "label": {
+            "en": "Extra settings"
+          },
+          "children": [
+            {
+              "id": "powerResponse",
+              "type": "dropdown",
+              "value": "off",
+              "label": {
+                "en": "Power-on response"
+              },
+              "values": [
+                {
+                  "id": "on",
+                  "label": {
+                    "en": "On"
+                  }
+                },
+                {
+                  "id": "off",
+                  "label": {
+                    "en": "Off"
+                  }
+                },
+                {
+                  "id": "stay",
+                  "label": {
+                    "en": "Resume the state before power outage"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "networkLed",
+              "type": "dropdown",
+              "value": "on",
+              "label": {
+                "en": "Network indicator"
+              },
+              "values": [
+                {
+                  "id": "on",
+                  "label": {
+                    "en": "On"
+                  }
+                },
+                {
+                  "id": "off",
+                  "label": {
+                    "en": "Off"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "duration",
+              "type": "dropdown",
+              "value": "off",
+              "label": {
+                "en": "Duration"
+              },
+              "values": [
+                {
+                  "id": "on",
+                  "label": {
+                    "en": "On"
+                  }
+                },
+                {
+                  "id": "off",
+                  "label": {
+                    "en": "Off"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "durationLimit",
+              "type": "number",
+              "label": {
+                "en": "Duration seconds"
+              },
+              "value": 0.5,
+              "min": 0.5,
+              "max": 3600
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "label": {
+            "en": "Thermostat"
+          },
+          "children": [
+            {
+              "id": "thermostatMode",
+              "type": "dropdown",
+              "value": "off",
+              "label": {
+                "en": "Thermostat mode"
+              },
+              "values": [
+                {
+                  "id": "temperature",
+                  "label": {
+                    "en": "Temperature"
+                  }
+                },
+                {
+                  "id": "humidity",
+                  "label": {
+                    "en": "Humidity"
+                  }
+                },
+                {
+                  "id": "normal",
+                  "label": {
+                    "en": "Off"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "targetHighTemperature",
+              "type": "number",
+              "label": {
+                "en": "High"
+              },
+              "value": 25,
+              "min": 0,
+              "max": 100
+            },
+            {
+              "id": "highTemperatureThreshold",
+              "type": "radio",
+              "label": {
+                "en": "High temperature threshold"
+              },
+              "value": "off",
+              "values": [
+                {
+                  "id": "on",
+                  "label": {
+                    "en": "Switch on"
+                  }
+                },
+                {
+                  "id": "off",
+                  "label": {
+                    "en": "Switch off"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "targetLowTemperature",
+              "type": "number",
+              "label": {
+                "en": "Low"
+              },
+              "value": 20,
+              "min": 0,
+              "max": 100
+            },
+            {
+              "id": "lowTemperatureThreshold",
+              "type": "radio",
+              "label": {
+                "en": "Low temperature threshold"
+              },
+              "value": "off",
+              "values": [
+                {
+                  "id": "on",
+                  "label": {
+                    "en": "Switch on"
+                  }
+                },
+                {
+                  "id": "off",
+                  "label": {
+                    "en": "Switch off"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "targetHighHumidity",
+              "type": "number",
+              "label": {
+                "en": "High"
+              },
+              "value": 40,
+              "min": 0,
+              "max": 100
+            },
+            {
+              "id": "highHumidityThreshold",
+              "type": "radio",
+              "label": {
+                "en": "High humidity threshold"
+              },
+              "value": "off",
+              "values": [
+                {
+                  "id": "on",
+                  "label": {
+                    "en": "Switch on"
+                  }
+                },
+                {
+                  "id": "off",
+                  "label": {
+                    "en": "Switch off"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "targetLowHumidity",
+              "type": "number",
+              "label": {
+                "en": "Low"
+              },
+              "value": 30,
+              "min": 0,
+              "max": 100
+            },
+            {
+              "id": "lowHumidityThreshold",
+              "type": "radio",
+              "label": {
+                "en": "Low humidity threshold"
+              },
+              "value": "off",
+              "values": [
+                {
+                  "id": "on",
+                  "label": {
+                    "en": "Switch on"
+                  }
+                },
+                {
+                  "id": "off",
+                  "label": {
+                    "en": "Switch off"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "zigbee_motion_sensor",
+      "name": {
+        "en": "Motion sensor"
+      },
+      "class": "socket",
+      "capabilities": [
+        "alarm_motion",
+        "measure_battery",
+        "alarm_battery"
+      ],
+      "images": {
+        "large": "/drivers/zigbee_motion_sensor/assets/images/large.png",
+        "small": "/drivers/zigbee_motion_sensor/assets/images/small.png"
+      },
+      "energy": {
+        "batteries": [
+          "CR2450"
+        ]
+      },
+      "pair": [
+        {
+          "id": "list_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_devices"
+          },
+          "options": {
+            "singular": false
+          }
+        },
+        {
+          "id": "add_devices",
+          "template": "add_devices"
+        }
+      ],
+      "settings": [
+        {
+          "type": "group",
+          "label": {
+            "en": "Device information"
+          },
+          "children": [
+            {
+              "id": "brandName",
+              "type": "label",
+              "label": {
+                "en": "Brand name"
+              },
+              "value": "brand_name"
+            },
+            {
+              "id": "model",
+              "type": "label",
+              "label": {
+                "en": "Model"
+              },
+              "value": "model_name"
+            },
+            {
+              "id": "ip",
+              "type": "label",
+              "label": {
+                "en": "IP"
+              },
+              "value": "ip_address"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "zigbee_switch",
+      "name": {
+        "en": "Switch"
+      },
+      "class": "socket",
+      "capabilities": [
+        "measure_battery",
+        "alarm_battery"
+      ],
+      "images": {
+        "large": "/drivers/zigbee_switch/assets/images/large.png",
+        "small": "/drivers/zigbee_switch/assets/images/small.png"
+      },
+      "energy": {
+        "batteries": [
+          "CR2450"
+        ]
+      },
+      "pair": [
+        {
+          "id": "list_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_devices"
+          },
+          "options": {
+            "singular": false
+          }
+        },
+        {
+          "id": "add_devices",
+          "template": "add_devices"
+        }
+      ],
+      "settings": [
+        {
+          "type": "group",
+          "label": {
+            "en": "Device information"
+          },
+          "children": [
+            {
+              "id": "brandName",
+              "type": "label",
+              "label": {
+                "en": "Brand name"
+              },
+              "value": "brand_name"
+            },
+            {
+              "id": "model",
+              "type": "label",
+              "label": {
+                "en": "Model"
+              },
+              "value": "model_name"
+            },
+            {
+              "id": "ip",
+              "type": "label",
+              "label": {
+                "en": "IP"
+              },
+              "value": "ip_address"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "zigbee_temperature_humidity_sensor",
+      "name": {
+        "en": "Temperature Humidity sensor"
+      },
+      "class": "socket",
+      "capabilities": [
+        "measure_temperature",
+        "measure_humidity",
+        "measure_battery",
+        "alarm_battery"
+      ],
+      "images": {
+        "large": "/drivers/zigbee_temperature_humidity_sensor/assets/images/large.png",
+        "small": "/drivers/zigbee_temperature_humidity_sensor/assets/images/small.png"
+      },
+      "energy": {
+        "batteries": [
+          "CR2450"
+        ]
+      },
+      "pair": [
+        {
+          "id": "list_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_devices"
+          },
+          "options": {
+            "singular": false
+          }
+        },
+        {
+          "id": "add_devices",
+          "template": "add_devices"
+        }
+      ],
+      "settings": [
+        {
+          "type": "group",
+          "label": {
+            "en": "Device information"
+          },
+          "children": [
+            {
+              "id": "brandName",
+              "type": "label",
+              "label": {
+                "en": "Brand name"
+              },
+              "value": "brand_name"
+            },
+            {
+              "id": "model",
+              "type": "label",
+              "label": {
+                "en": "Model"
+              },
+              "value": "model_name"
+            },
+            {
+              "id": "ip",
+              "type": "label",
+              "label": {
+                "en": "IP"
+              },
+              "value": "ip_address"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "capabilities": {
+    "RGBEffects": {
+      "type": "enum",
+      "title": {
+        "en": "RGB modes"
+      },
+      "desc": {
+        "en": "RGB modes"
+      },
+      "values": [
+        {
+          "id": "1",
+          "title": {
+            "en": "Colorful"
+          }
+        },
+        {
+          "id": "2",
+          "title": {
+            "en": "Colorful gradient"
+          }
+        },
+        {
+          "id": "3",
+          "title": {
+            "en": "Colorful breath"
+          }
+        },
+        {
+          "id": "8",
+          "title": {
+            "en": "RGB gradient"
+          }
+        },
+        {
+          "id": "9",
+          "title": {
+            "en": "RGB pulse"
+          }
+        },
+        {
+          "id": "10",
+          "title": {
+            "en": "RGB breath"
+          }
+        },
+        {
+          "id": "11",
+          "title": {
+            "en": "RGB strobe"
+          }
+        }
+      ],
+      "getable": true,
+      "setable": true
+    }
+  }
+}

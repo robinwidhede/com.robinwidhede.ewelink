@@ -7,6 +7,9 @@ class Ewelink extends App {
   async onInit() {
     this.log("Ewelink is running...");
 
+    // Wait until settings are properly initialized
+    await this.checkAndInitializeSettings();
+
     // Initialize eWeLink API
     this.ewelinkApi = new EwelinkApi(this.log);
 
@@ -14,7 +17,7 @@ class Ewelink extends App {
     this.onSettingsChanged = this.onSettingsChanged.bind(this);
 
     // Listen to changes in the settings
-    if (this.homey.settings) {
+    if (this.homey.settings && typeof this.homey.settings.on === 'function') {
       this.homey.settings.on("set", this.onSettingsChanged);
       this.homey.settings.on("unset", this.onSettingsChanged);
     } else {
@@ -31,6 +34,22 @@ class Ewelink extends App {
       }
     } else {
       this.log("No account information found or Homey settings get method is undefined.");
+    }
+  }
+
+  async checkAndInitializeSettings(retries = 5) {
+    while (retries > 0) {
+      if (this.homey.settings && typeof this.homey.settings.get === 'function') {
+        this.log('Homey settings initialized successfully.');
+        break;
+      }
+      this.log('Homey settings not initialized, retrying...');
+      await new Promise(resolve => setTimeout(resolve, 1000)); // Wait for 1 second
+      retries--;
+    }
+
+    if (retries === 0) {
+      this.log('Failed to initialize Homey settings after multiple attempts.');
     }
   }
 

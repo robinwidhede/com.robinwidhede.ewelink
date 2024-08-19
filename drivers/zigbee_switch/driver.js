@@ -1,29 +1,37 @@
 "use strict";
 
-const Homey = require("homey");
-const models = ["zigbee_ON_OFF_SWITCH_1000"];
+const { Driver } = require("homey");
 
-class ZigbeeSwitch extends Homey.Driver {
+class ZigbeeSwitch extends Driver {
   onInit() {
     this.log("Zigbee Switch driver has been initialized");
 
     // Registering FlowCard Triggers for different events
     this.triggers = {
-      click: new Homey.FlowCardTriggerDevice("click_switch").register(),
-      double_click: new Homey.FlowCardTriggerDevice("double_click_switch").register(),
-      long_press: new Homey.FlowCardTriggerDevice("long_press_switch").register(),
+      click: this.homey.flow.getDeviceTriggerCard("click_switch"),
+      double_click: this.homey.flow.getDeviceTriggerCard("double_click_switch"),
+      long_press: this.homey.flow.getDeviceTriggerCard("long_press_switch"),
     };
   }
 
-  async onPairListDevices() {
-    try {
-      const devices = await Homey.app.ewelinkApi.getDevices();
-      const filteredDevices = devices.filter((device) => models.includes(device.productModel));
-      return this.deviceList(filteredDevices);
-    } catch (error) {
-      this.error("Error during pairing:", error);
-      throw new Error("Failed to retrieve devices");
-    }
+  async onPair(session) {
+    session.setHandler("list_devices", async () => {
+      try {
+        const devices = await this.homey.app.ewelinkApi.getDevices();
+        const filteredDevices = devices.filter((device) =>
+          this.isSupportedDevice(device)
+        );
+        return this.deviceList(filteredDevices);
+      } catch (error) {
+        this.error("Error during pairing:", error.message);
+        throw new Error("Failed to retrieve devices");
+      }
+    });
+  }
+
+  isSupportedDevice(device) {
+    const models = ["zigbee_ON_OFF_SWITCH_1000"];
+    return models.includes(device.productModel);
   }
 
   deviceList(devices) {

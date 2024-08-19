@@ -27,79 +27,113 @@
   },
   "drivers": [
     {
-	  "id": "abc-2.0-led",
-	  "name": {
-		"en": "ABC 2.0 LED"
-	  },
-	  "id": "circuit-breaker-zjsb9",
-	  "name": {
-		"en": "Circuit Breaker"
-	  },
-	  "id": "coolkit-outdoor-socket",
-	  "name": {
-		"en": "Coolkit Outdoor Socket"
-	  },
-	  "id": "coolkit-socket",
-	  "name": {
-		"en": "Coolkit Socket"
-	  },
-	  "id": "generic",
-	  "name": {
-		"en": "Generic devices"
-	  },
-	  "id": "sonoff-4ch-pro",
-	  "name": {
-		"en": "Sonoff 4CH Pro"
-	  },
-	  "id": "sonoff-basic",
-	  "name": {
-		"en": "Sonoff Basic / Basic 2"
-	  },
-	  "id": "sonoff-g1-gsm",
-	  "name": {
-		"en": "Sonoff G1 GSM"
-	  },
-	  "id": "sonoff-mini",
-	  "name": {
-		"en": "Sonoff Mini"
-	  },
-	  "id": "sonoff-pow",
-	  "name": {
-		"en": "Sonoff Pow"
-	  },
-	  "id": "sonoff-s20",
-	  "name": {
-		"en": "Sonoff S20 / S26 (R1)"
-	  },
-	  "id": "sonoff-sc",
-	  "name": {
-		"en": "Sonoff SC"
-	  },
-	  "id": "sonoff-t1-2c",
-	  "name": {
-		"en": "Sonoff T1 2C"
-	  },
-	  "id": "sonoff-t4-1c",
-	  "name": {
-		"en": "Sonoff T4EU1C"
-	  },
-	  "id": "sonoff-th16",
-	  "name": {
-		"en": "Sonoff TH16"
-	  },
-	  "id": "zigbee_motion_sensor",
-	  "name": {
-		"en": "Motion sensor"
-	  },
-	  "id": "zigbee_switch",
-	  "name": {
-		"en": "Switch"
-	  },
-	  "id": "zigbee_temperature_humidity_sensor",
-	  "name": {
-		"en": "Temperature Humidity sensor"
-	  }
-	}
+      "id": "abc-2.0-led",
+      "name": {
+        "en": "ABC 2.0 LED"
+      }
+    },
+    {
+      "id": "circuit-breaker-zjsb9",
+      "name": {
+        "en": "Circuit Breaker"
+      }
+    },
+    {
+      "id": "coolkit-outdoor-socket",
+      "name": {
+        "en": "Coolkit Outdoor Socket"
+      }
+    },
+    {
+      "id": "coolkit-socket",
+      "name": {
+        "en": "Coolkit Socket"
+      }
+    },
+    {
+      "id": "generic",
+      "name": {
+        "en": "Generic devices"
+      }
+    },
+    {
+      "id": "sonoff-4ch-pro",
+      "name": {
+        "en": "Sonoff 4CH Pro"
+      }
+    },
+    {
+      "id": "sonoff-basic",
+      "name": {
+        "en": "Sonoff Basic / Basic 2"
+      }
+    },
+    {
+      "id": "sonoff-g1-gsm",
+      "name": {
+        "en": "Sonoff G1 GSM"
+      }
+    },
+    {
+      "id": "sonoff-mini",
+      "name": {
+        "en": "Sonoff Mini"
+      }
+    },
+    {
+      "id": "sonoff-pow",
+      "name": {
+        "en": "Sonoff Pow"
+      }
+    },
+    {
+      "id": "sonoff-s20",
+      "name": {
+        "en": "Sonoff S20 / S26 (R1)"
+      }
+    },
+    {
+      "id": "sonoff-sc",
+      "name": {
+        "en": "Sonoff SC"
+      }
+    },
+    {
+      "id": "sonoff-t1-2c",
+      "name": {
+        "en": "Sonoff T1 2C"
+      }
+    },
+    {
+      "id": "sonoff-t4-1c",
+      "name": {
+        "en": "Sonoff T4EU1C"
+      }
+    },
+    {
+      "id": "sonoff-th16",
+      "name": {
+        "en": "Sonoff TH16"
+      }
+    },
+    {
+      "id": "zigbee_motion_sensor",
+      "name": {
+        "en": "Motion sensor"
+      }
+    },
+    {
+      "id": "zigbee_switch",
+      "name": {
+        "en": "Switch"
+      }
+    },
+    {
+      "id": "zigbee_temperature_humidity_sensor",
+      "name": {
+        "en": "Temperature Humidity sensor"
+      }
+    }
   ],
   "flow": {
     "triggers": [

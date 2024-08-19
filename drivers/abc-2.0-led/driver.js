@@ -49,9 +49,8 @@ class ABC20LEDDriver extends Driver {
     }));
   }
 
-  async onSetRGBMode(args) {
+  async onSetRGBMode({ device, mode }) {
     try {
-      const { device } = args;
       const { deviceid, apikey, uiid } = device.getData();
       const data = {
         name: device.getName(),
@@ -61,7 +60,7 @@ class ABC20LEDDriver extends Driver {
         api: 'ws',
       };
 
-      await this.homey.app.ewelinkApi.sendDeviceUpdate(data, { switch: 'on', mode: parseInt(args.mode) });
+      await this.homey.app.ewelinkApi.sendDeviceUpdate(data, { switch: 'on', mode: parseInt(mode) });
       return true;
     } catch (error) {
       this.log('Error in setRGBMode Flow action:', error.message);

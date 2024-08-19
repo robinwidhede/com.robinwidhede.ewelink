@@ -1,6 +1,6 @@
 "use strict";
 
-const { Driver, FlowCardAction } = require('homey');
+const { Driver } = require('homey');
 
 class Sonoff4CHPro extends Driver {
 
@@ -10,15 +10,15 @@ class Sonoff4CHPro extends Driver {
 
   registerFlowActions() {
     this.actions = {
-      secondChannelOn: new FlowCardAction('secondChannelOn').register(),
-      secondChannelOff: new FlowCardAction('secondChannelOff').register(),
-      secondChannelToggle: new FlowCardAction('secondChannelToggle').register(),
-      threeChannelOn: new FlowCardAction('threeChannelOn').register(),
-      threeChannelOff: new FlowCardAction('threeChannelOff').register(),
-      threeChannelToggle: new FlowCardAction('threeChannelToggle').register(),
-      fourChannelOn: new FlowCardAction('fourChannelOn').register(),
-      fourChannelOff: new FlowCardAction('fourChannelOff').register(),
-      fourChannelToggle: new FlowCardAction('fourChannelToggle').register(),
+      secondChannelOn: this.homey.flow.getActionCard('secondChannelOn').register(),
+      secondChannelOff: this.homey.flow.getActionCard('secondChannelOff').register(),
+      secondChannelToggle: this.homey.flow.getActionCard('secondChannelToggle').register(),
+      threeChannelOn: this.homey.flow.getActionCard('threeChannelOn').register(),
+      threeChannelOff: this.homey.flow.getActionCard('threeChannelOff').register(),
+      threeChannelToggle: this.homey.flow.getActionCard('threeChannelToggle').register(),
+      fourChannelOn: this.homey.flow.getActionCard('fourChannelOn').register(),
+      fourChannelOff: this.homey.flow.getActionCard('fourChannelOff').register(),
+      fourChannelToggle: this.homey.flow.getActionCard('fourChannelToggle').register(),
     };
   }
 

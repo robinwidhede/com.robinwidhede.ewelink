@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Select ABC 2.0 LED Device</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 500px;
+      margin: 20px auto;
+      padding: 20px;
+      background-color: white;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .container h1 {
+      font-size: 24px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    .device-list {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+    }
+    .device-list li {
+      padding: 10px;
+      background-color: #eee;
+      margin-bottom: 10px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .device-list li:hover {
+      background-color: #ddd;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Select Your ABC 2.0 LED Device</h1>
+    <ul class="device-list" id="device-list"></ul>
+  </div>
+  <script>
+    Homey.on('devices', function(devices) {
+      var deviceList = document.getElementById('device-list');
+      deviceList.innerHTML = '';
+
+      devices.forEach(function(device) {
+        var li = document.createElement('li');
+        li.textContent = device.name || 'Unnamed Device';
+        li.addEventListener('click', function() {
+          Homey.emit('device-selected', device);
+          Homey.nextView();
+        });
+        deviceList.appendChild(li);
+      });
+    });
+
+    Homey.emit('get-devices');
+  </script>
+</body>
+</html>

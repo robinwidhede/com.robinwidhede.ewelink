@@ -1,0 +1,29 @@
+<div class="add-device">
+  <h3>Add Zigbee Switch</h3>
+  <p>Click the button below to start the pairing process for your Zigbee Switch.</p>
+
+  <div class="pairing-actions">
+    <button class="button button-primary" id="start-pairing">
+      Start Pairing
+    </button>
+  </div>
+
+  <div class="status">
+    <p>Status: <span id="status-text">Waiting for user action...</span></p>
+  </div>
+</div>
+
+<script>
+  document.getElementById('start-pairing').addEventListener('click', function () {
+    Homey.emit('list_devices');
+    document.getElementById('status-text').innerText = 'Searching for devices...';
+  });
+
+  Homey.on('list_devices', function (devices) {
+    if (devices.length === 0) {
+      document.getElementById('status-text').innerText = 'No devices found.';
+    } else {
+      Homey.emit('next');
+    }
+  });
+</script>

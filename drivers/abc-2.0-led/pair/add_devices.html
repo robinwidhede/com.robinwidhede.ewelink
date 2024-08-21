@@ -1,0 +1,21 @@
+<div class="add-device">
+  <h3>ABC 2.0 LED</h3>
+  <p>Press the button below to start the pairing process for your ABC 2.0 LED device.</p>
+
+  <div class="pairing-actions">
+    <button class="button button-primary" id="start-pairing">
+      Start Pairing
+    </button>
+  </div>
+
+  <div class="status">
+    <p>Status: <span id="status-text">Waiting to start pairing...</span></p>
+  </div>
+</div>
+
+<script>
+  document.getElementById('start-pairing').addEventListener('click', function () {
+    Homey.emit('start_pairing');
+    document.getElementById('status-text').innerText = 'Pairing process started...';
+  });
+</script>

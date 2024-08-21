@@ -1,0 +1,47 @@
+<div class="list-device">
+  <h3>Select Your Zigbee Motion Sensor</h3>
+  <p>Select the Zigbee Motion Sensor from the list below.</p>
+
+  <ul class="device-list" id="device-list">
+    <!-- The device list will be populated here -->
+  </ul>
+
+  <div class="pairing-actions">
+    <button class="button button-secondary" id="cancel-selection">
+      Cancel
+    </button>
+  </div>
+
+  <div class="status">
+    <p>Status: <span id="status-text">Waiting for user selection...</span></p>
+  </div>
+</div>
+
+<script>
+  Homey.on('list_devices', function (devices) {
+    const deviceList = document.getElementById('device-list');
+    deviceList.innerHTML = '';
+
+    devices.forEach(function (device) {
+      const listItem = document.createElement('li');
+      listItem.textContent = device.name;
+      listItem.classList.add('device-list-item');
+      listItem.addEventListener('click', function () {
+        Homey.emit('add_device', device);
+        document.getElementById('status-text').innerText = 'Pairing device...';
+      });
+      deviceList.appendChild(listItem);
+    });
+
+    if (devices.length === 0) {
+      document.getElementById('status-text').innerText = 'No devices found.';
+    } else {
+      document.getElementById('status-text').innerText = 'Select a device from the list.';
+    }
+  });
+
+  document.getElementById('cancel-selection').addEventListener('click', function () {
+    Homey.emit('abort');
+    document.getElementById('status-text').innerText = 'Pairing cancelled.';
+  });
+</script>

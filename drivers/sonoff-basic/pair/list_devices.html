@@ -1,0 +1,45 @@
+<div class="list-device">
+  <h3>Select Your Sonoff Basic Device</h3>
+  <p>Select the Sonoff Basic device from the list below.</p>
+
+  <ul class="device-list" id="device-list">
+    <!-- The device list will be populated here -->
+  </ul>
+
+  <div class="pairing-actions">
+    <button class="button button-secondary" id="cancel-selection">
+      Cancel
+    </button>
+  </div>
+
+  <div class="status">
+    <p>Status: <span id="status-text">Waiting for device selection...</span></p>
+  </div>
+</div>
+
+<script>
+  Homey.on('list_devices', function (devices) {
+    const deviceList = document.getElementById('device-list');
+    deviceList.innerHTML = ''; // Clear previous list
+
+    devices.forEach(function (device) {
+      const li = document.createElement('li');
+      li.innerText = device.name;
+      li.dataset.deviceId = device.id;
+      li.addEventListener('click', function () {
+        Homey.emit('add_device', { device });
+        document.getElementById('status-text').innerText = 'Device selected: ' + device.name;
+        Homey.emit('next');
+      });
+      deviceList.appendChild(li);
+    });
+
+    if (devices.length === 0) {
+      document.getElementById('status-text').innerText = 'No devices found.';
+    }
+  });
+
+  document.getElementById('cancel-selection').addEventListener('click', function () {
+    Homey.emit('abort');
+  });
+</script>

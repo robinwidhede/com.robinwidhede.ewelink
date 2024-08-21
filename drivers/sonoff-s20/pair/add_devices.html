@@ -1,29 +1,45 @@
-<div class="add-device">
-  <h3>Add Sonoff S20 Device</h3>
-  <p>Click the button below to start the pairing process for your Sonoff S20 device.</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Add Sonoff S20 Device</title>
+  <link rel="stylesheet" href="../assets/bulma.min.css">
+</head>
+<body>
+  <div class="add-device">
+    <h3>Add Your Sonoff S20</h3>
+    <p>Adding device: <span id="device-name"></span></p>
 
-  <div class="pairing-actions">
-    <button class="button button-primary" id="start-pairing">
-      Start Pairing
-    </button>
+    <div class="pairing-actions">
+      <button class="button button-primary" id="add-button">Add Device</button>
+      <button class="button button-secondary" id="cancel-button">Cancel</button>
+    </div>
+
+    <div class="status">
+      <p>Status: <span id="status-text">Ready to add device.</span></p>
+    </div>
   </div>
 
-  <div class="status">
-    <p>Status: <span id="status-text">Waiting for user action...</span></p>
-  </div>
-</div>
+  <script>
+    let selectedDevice = null;
 
-<script>
-  document.getElementById('start-pairing').addEventListener('click', function () {
-    Homey.emit('list_devices');
-    document.getElementById('status-text').innerText = 'Searching for devices...';
-  });
+    Homey.on('add_device', function (device) {
+      selectedDevice = device;
+      document.getElementById('device-name').innerText = device.name;
+    });
 
-  Homey.on('list_devices', function (devices) {
-    if (devices.length === 0) {
-      document.getElementById('status-text').innerText = 'No devices found.';
-    } else {
-      Homey.emit('next');
-    }
-  });
-</script>
+    document.getElementById('add-button').addEventListener('click', function () {
+      if (selectedDevice) {
+        Homey.emit('device_added', selectedDevice);
+        document.getElementById('status-text').innerText = 'Device added successfully.';
+      }
+    });
+
+    document.getElementById('cancel-button').addEventListener('click', function () {
+      Homey.emit('abort');
+      document.getElementById('status-text').innerText = 'Adding device cancelled.';
+    });
+  </script>
+</body>
+</html>

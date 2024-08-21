@@ -1,47 +1,61 @@
-<div class="list-device">
-  <h3>Select Your Sonoff S20 Device</h3>
-  <p>Select the Sonoff S20 device from the list below.</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Select Sonoff S20 Device</title>
+  <link rel="stylesheet" href="../assets/bulma.min.css">
+</head>
+<body>
+  <div class="list-device">
+    <h3>Select Your Sonoff S20</h3>
+    <p>Select a Sonoff S20 device from the list below.</p>
 
-  <ul class="device-list" id="device-list">
-    <!-- The device list will be populated here -->
-  </ul>
+    <ul class="device-list" id="device-list">
+      <!-- The device list will be populated here -->
+    </ul>
 
-  <div class="pairing-actions">
-    <button class="button button-secondary" id="cancel-selection">
-      Cancel
-    </button>
+    <div class="pairing-actions">
+      <button class="button button-secondary" id="cancel-selection">Cancel</button>
+    </div>
+
+    <div class="status">
+      <p>Status: <span id="status-text">Waiting for user selection...</span></p>
+    </div>
   </div>
 
-  <div class="status">
-    <p>Status: <span id="status-text">Waiting for user selection...</span></p>
-  </div>
-</div>
+  <script>
+    Homey.on('list_devices', function (devices) {
+      const deviceList = document.getElementById('device-list');
+      deviceList.innerHTML = '';
 
-<script>
-  Homey.on('list_devices', function (devices) {
-    const deviceList = document.getElementById('device-list');
-    deviceList.innerHTML = '';
-
-    devices.forEach(function (device) {
-      const listItem = document.createElement('li');
-      listItem.textContent = device.name;
-      listItem.classList.add('device-list-item');
-      listItem.addEventListener('click', function () {
-        Homey.emit('add_device', device);
-        document.getElementById('status-text').innerText = 'Pairing device...';
+      devices.forEach(function (device) {
+        const listItem = document.createElement('li');
+        listItem.textContent = device.name;
+        listItem.classList.add('device-list-item');
+        listItem.addEventListener('click', function () {
+          Homey.emit('add_device', device);
+          document.getElementById('status-text').innerText = 'Device selected. Proceeding to add device...';
+        });
+        deviceList.appendChild(listItem);
       });
-      deviceList.appendChild(listItem);
+
+      if (devices.length === 0) {
+        document.getElementById('status-text').innerText = 'No devices found.';
+      } else {
+        document.getElementById('status-text').innerText = 'Select a device from the list.';
+      }
     });
 
-    if (devices.length === 0) {
-      document.getElementById('status-text').innerText = 'No devices found.';
-    } else {
-      document.getElementById('status-text').innerText = 'Select a device from the list.';
-    }
-  });
+    document.getElementById('cancel-selection').addEventListener('click', function () {
+      Homey.emit('abort');
+      document.getElementById('status-text').innerText = 'Pairing cancelled.';
+    });
 
-  document.getElementById('cancel-selection').addEventListener('click', function () {
-    Homey.emit('abort');
-    document.getElementById('status-text').innerText = 'Pairing cancelled.';
-  });
-</script>
+    // On device selection, proceed to add device page
+    Homey.on('add_device', function (device) {
+      Homey.emit('next', { view: 'add_device_sonoff_s20', device: device });
+    });
+  </script>
+</body>
+</html>

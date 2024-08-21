@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>eWeLink Login</title>
+  <link rel="stylesheet" href="../assets/bulma.min.css">
+  <style>
+    .login-container {
+      max-width: 400px;
+      margin: 50px auto;
+      padding: 20px;
+      background: white;
+      border-radius: 10px;
+    }
+    .status {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <h3>Login to eWeLink Cloud</h3>
+    <p>Please enter your eWeLink credentials to proceed.</p>
+
+    <div class="login-form">
+      <input type="text" id="country-code" class="input" placeholder="Country code (e.g., 7 for RU, 998 for UZ)">
+      <input type="text" id="login" class="input" placeholder="Phone or email">
+      <input type="password" id="password" class="input" placeholder="Password">
+      <button class="button is-primary is-fullwidth" id="login-button">Login</button>
+    </div>
+
+    <div class="status">
+      <p>Status: <span id="status-text">Awaiting login...</span></p>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('login-button').addEventListener('click', function () {
+      const loginData = {
+        countryCode: document.getElementById('country-code').value,
+        login: document.getElementById('login').value,
+        password: document.getElementById('password').value,
+      };
+
+      document.getElementById('status-text').innerText = 'Logging in...';
+
+      Homey.api('POST', '/getDevices', loginData, function (error, result) {
+        if (error || !result) {
+          document.getElementById('status-text').innerText = `Error: ${error.message || 'Unknown error'}`;
+          return;
+        }
+
+        if (result.status === 'error') {
+          document.getElementById('status-text').innerText = `Error: ${result.msg || 'Error occurred'}`;
+        } else {
+          Homey.emit('login_success', result.deviceList);
+          document.getElementById('status-text').innerText = 'Login successful. Redirecting...';
+        }
+      });
+    });
+
+    // On successful login, redirect to the device list page
+    Homey.on('login_success', function (deviceList) {
+      Homey.emit('next', { view: 'list_devices', devices: deviceList });
+    });
+  </script>
+</body>
+</html>

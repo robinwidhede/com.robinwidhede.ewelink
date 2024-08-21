@@ -1,4 +1,3 @@
-// Updated app.js
 "use strict";
 
 const { App } = require("homey");
@@ -60,6 +59,17 @@ class Ewelink extends App {
         await this.connectToEwelink(account);
       }
     }
+  }
+
+  sign(signData) {
+    return this.connectToEwelink(signData)
+      .then(() => this.httpClient.getDevices())
+      .then(deviceList => ({ status: "ok", deviceList }))
+      .catch(error => ({ status: "error", msg: error.message }));
+  }
+
+  getDevices(signData) {
+    return this.httpClient.getDevices(signData);
   }
 }
 

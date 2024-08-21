@@ -1,279 +1,106 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>Ewelink Settings</title>
-    <script type="text/javascript" src="/homey.js" data-origin="settings"></script>
-    <script src="../assets/vue.min.js"></script>
-    <link rel="stylesheet" href="../assets/bulma.min.css" />
-    <style>
-      .is-horizontal-center {
-        justify-content: center;
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Ewelink Settings</title>
+  <script type="text/javascript" src="/homey.js" data-origin="settings"></script>
+  <script src="../assets/vue.min.js"></script>
+  <link rel="stylesheet" href="../assets/bulma.min.css" />
+  <style>
+    .is-horizontal-center {
+      justify-content: center;
+    }
+    .loading-spinner {
+      border: 4px solid rgba(0, 0, 0, 0.1);
+      border-left-color: #22a6b3;
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      animation: spin 1s linear infinite;
+      margin: auto;
+    }
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
       }
-      .loading-spinner {
-        border: 4px solid rgba(0, 0, 0, 0.1);
-        border-left-color: #22a6b3;
-        border-radius: 50%;
-        width: 36px;
-        height: 36px;
-        animation: spin 1s linear infinite;
-        margin: auto;
+      100% {
+        transform: rotate(360deg);
       }
-      @keyframes spin {
-        0% {
-          transform: rotate(0deg);
-        }
-        100% {
-          transform: rotate(360deg);
-        }
-      }
-      .disabled-input {
-        background-color: #f0f0f0;
-        pointer-events: none;
-      }
-    </style>
-  </head>
-  <body style="background: linear-gradient(135deg, #5541d6 0%, #3f94ff 100%)">
-    <div id="ewelink" style="padding: 10px">
-      <div class="container">
-        <div v-show="alert" id="alert" class="notification" :class="alertClass" style="margin-bottom: 10px">
-          {{ alertMessage }}
-        </div>
-        <div v-if="page === 'login'" class="card equal-height" style="border-radius: 5px">
-          <div class="card-content is-flex is-horizontal-center">
-            <figure class="image is-64x64">
-              <img src="../assets/logo.png" />
-            </figure>
-          </div>
-          <div class="card-content columns">
-            <div class="column is-4">
-              <input
-                class="input"
-                :class="{ 'disabled-input': loading }"
-                type="text"
-                placeholder="Country code (e.g., 7 for RU, 998 for UZ)"
-                v-model="countryCode"
-                @input="onEdit"
-                style="font-weight: 600; padding-left: 10px; padding-top: 6px"
-              />
-            </div>
-            <div class="column is-4">
-              <input
-                class="input"
-                :class="{ 'disabled-input': loading }"
-                type="text"
-                placeholder="Phone or email"
-                v-model="login"
-                @input="onEdit"
-                style="font-weight: 600; padding-left: 10px; padding-top: 6px"
-              />
-            </div>
-            <div class="column is-4">
-              <input
-                class="input"
-                :class="{ 'disabled-input': loading }"
-                type="password"
-                placeholder="Password"
-                v-model="password"
-                @input="onEdit"
-                style="font-weight: 600; padding-left: 10px; padding-top: 6px"
-              />
-            </div>
-            <div class="column is-4">
-              <button
-                type="button"
-                class="button is-primary is-fullwidth"
-                style="background: linear-gradient(135deg, #5541d6 0%, #3f94ff 100%)"
-                @click="signin"
-                :disabled="empty || loading"
-              >
-                {{ buttonText }}
-              </button>
-            </div>
-          </div>
-        </div>
-        <div v-if="page === 'profile'" class="card equal-height" style="border-radius: 5px">
-          <div class="card-content is-flex is-horizontal-center">
-            <figure class="image is-64x64">
-              <img src="../assets/logo.png" />
-            </figure>
-          </div>
-          <div class="card-content columns">
-            <div class="column is-4">
-              <label class="label">Hello</label>
-              <input class="input is-static" type="text" :value="login" readonly />
-            </div>
-            <div class="column is-4">
-              <label class="label">Connected devices</label>
-              <input class="input is-static" type="number" :value="deviceCount" readonly />
-            </div>
-            <div class="column is-4">
-              <button
-                type="button"
-                class="button is-primary is-fullwidth"
-                style="background: linear-gradient(135deg, #5541d6 0%, #3f94ff 100%)"
-                @click="logout"
-              >
-                Logout
-              </button>
-            </div>
-          </div>
-        </div>
-        <div v-if="loading" class="loading-spinner"></div>
+    }
+    .disabled-input {
+      background-color: #f0f0f0;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body style="background: linear-gradient(135deg, #5541d6 0%, #3f94ff 100%)">
+  <div id="ewelink" style="padding: 10px">
+    <div class="container">
+      <div v-show="alert" id="alert" class="notification" :class="alertClass" style="margin-bottom: 10px">
+        {{ alertMessage }}
       </div>
+      <div class="card equal-height" style="border-radius: 5px">
+        <div class="card-content columns">
+          <div class="column is-4">
+            <label class="checkbox">
+              <input type="checkbox" v-model="useLANControl"> Use LAN Control
+            </label>
+          </div>
+        </div>
+      </div>
+      <div v-if="loading" class="loading-spinner"></div>
     </div>
-    <script type="text/javascript">
-      function onHomeyReady(Homey) {
-        if (!Homey) {
-          console.error("Homey object is not available.");
-          return;
-        }
+  </div>
+  <script type="text/javascript">
+    function onHomeyReady(Homey) {
+      if (!Homey) {
+        console.error("Homey object is not available.");
+        return;
+      }
 
-        Homey.ready();
+      Homey.ready();
 
-        new Vue({
-          el: "#ewelink",
-          data() {
-            return {
-              login: null,
-              password: null,
-              countryCode: null,
-              alert: false,
-              alertMessage: "",
-              alertClass: "",
-              page: "login",
-              deviceCount: 0,
-              buttonText: "Loading...",
-              loading: true,
-            };
+      new Vue({
+        el: "#ewelink",
+        data() {
+          return {
+            useLANControl: false,
+            alert: false,
+            alertMessage: "",
+            alertClass: "",
+            loading: true,
+          };
+        },
+        mounted() {
+          Homey.get("useLANControl", (err, value) => {
+            if (err) {
+              this.showAlert(`Error: ${err}`, "is-danger");
+              return Homey.alert(err);
+            }
+
+            this.useLANControl = value || false;
+            this.loading = false;
+          });
+        },
+        methods: {
+          showAlert(message, type) {
+            this.alertMessage = message;
+            this.alertClass = type;
+            this.alert = true;
           },
-          mounted() {
-            Homey.get("account", (err, user) => {
+          saveSettings() {
+            Homey.set("useLANControl", this.useLANControl, (err) => {
               if (err) {
                 this.showAlert(`Error: ${err}`, "is-danger");
                 return Homey.alert(err);
               }
-
-              if (!user || !user.countryCode) {
-                this.loading = false;
-                this.buttonText = "Sign in";
-              } else {
-                this.login = user.login;
-                this.password = user.password;
-                this.countryCode = user.countryCode;
-
-                this.connectAndFetchDevices(user);
-              }
+              this.showAlert("Settings saved", "is-success");
             });
           },
-          methods: {
-            showAlert(message, type) {
-              this.alertMessage = message;
-              this.alertClass = type;
-              this.alert = true;
-            },
-            connectAndFetchDevices(user) {
-              Homey.api("POST", "/api/app/com.robinwidhede.ewelink/getDevices", user, (error, result) => {
-                console.log("API response:", result);  // Improved logging
-                if (error || !result) {
-                  this.showAlert(`Error: ${error.message || "Unknown error"}`, "is-danger");
-                  this.loading = false;
-                  this.buttonText = "Sign in";
-                  return;
-                }
-
-                if (result.status === "error") {
-                  this.showAlert(result.msg || "Error occurred", "is-danger");
-                  this.loading = false;
-                  this.buttonText = "Sign in";
-                } else {
-                  this.page = "profile";
-                  this.deviceCount = result.deviceList.length;
-                  this.loading = false;
-                }
-              });
-            },
-            signin() {
-              if (this.empty) return;
-
-              this.loading = true;
-              this.buttonText = "Loading...";
-              this.alert = false;
-
-              const signData = {
-                login: this.login,
-                password: this.password,
-                countryCode: this.countryCode,
-              };
-
-              console.log("Attempting to sign in...", signData);
-
-              Homey.api("POST", "/api/app/com.robinwidhede.ewelink/getDevices", signData, (error, result) => {
-                console.log("API response:", result);
-
-                if (error || !result) {
-                  this.showAlert(`Error: ${error.message || "Unknown error"}`, "is-danger");
-                  this.loading = false;
-                  this.buttonText = "Sign in";
-                  return;
-                }
-
-                if (result.status === "error") {
-                  this.showAlert(result.msg || "Error occurred", "is-danger");
-                  this.loading = false;
-                  this.buttonText = "Sign in";
-                } else {
-                  this.page = "profile";
-                  this.deviceCount = result.deviceList.length;
-
-                  Homey.set("account", signData, (error) => {
-                    if (error) {
-                      this.showAlert(`Error: ${error.message}`, "is-danger");
-                      return Homey.alert(error.message);
-                    }
-                    this.showAlert("Saved", "is-success");
-                    this.loading = false;
-                    this.buttonText = "Sign in";
-                  });
-                }
-              });
-            },
-            logout() {
-              this.page = "login";
-              this.deviceCount = 0;
-              this.password = null;
-              this.countryCode = null;
-              this.loading = false;
-              this.buttonText = "Sign in";
-
-              Homey.unset("account", (err) => {
-                if (err) {
-                  this.showAlert(`Error: ${err}`, "is-danger");
-                } else {
-                  this.showAlert("Logged out successfully", "is-success");
-                }
-              });
-            },
-            onEdit() {
-              this.alert = false;
-            },
-          },
-          computed: {
-            empty() {
-              return (
-                !this.login ||
-                this.login.trim() === "" ||
-                !this.password ||
-                this.password.trim() === "" ||
-                !this.countryCode ||
-                this.countryCode.trim() === "" ||
-                this.loading
-              );
-            },
-          },
-        });
-      }
-    </script>
-  </body>
+        },
+      });
+    }
+  </script>
+</body>
 </html>

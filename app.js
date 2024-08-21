@@ -1,100 +1,65 @@
+// Updated app.js
 "use strict";
 
 const { App } = require("homey");
-const EwelinkApi = require("./lib/index");
+const eWeLinkHTTP = require("./lib/http");
+const eWeLinkLAN = require("./lib/lan");
+const eWeLinkWS = require("./lib/ws");
 
 class Ewelink extends App {
   async onInit() {
     this.log("Ewelink is running...");
 
-    // Wait until settings are properly initialized
-    await this.checkAndInitializeSettings();
-
-    // Initialize eWeLink API
-    this.ewelinkApi = new EwelinkApi(this.log);
-
-    // Register API endpoint
-    this.homey.cloud.createWebhook('/getDevices', async (data) => {
-      try {
-        const signData = data.body;
-        const devices = await this.getDevices(signData);
-        return { status: 'success', deviceList: devices };
-      } catch (error) {
-        this.log("API request failed:", error);
-        return { status: 'error', msg: error.message };
-      }
-    });
+    this.devicesInHomey = new Map();
+    this.devicesInEwelink = new Map();
 
     // Bind the settings change handler
     this.onSettingsChanged = this.onSettingsChanged.bind(this);
+    this.homey.settings.on("set", this.onSettingsChanged);
+    this.homey.settings.on("unset", this.onSettingsChanged);
 
-    // Listen to changes in the settings
-    if (this.homey.settings && typeof this.homey.settings.on === 'function') {
-      this.homey.settings.on("set", this.onSettingsChanged);
-      this.homey.settings.on("unset", this.onSettingsChanged);
-    } else {
-      this.log("Error: Homey settings object is not initialized properly.");
-    }
-
-    // Handle initial connection
-    const account = this.homey.settings && typeof this.homey.settings.get === 'function' ? this.homey.settings.get('account') : null;
-    if (account) {
-      try {
-        await this.ewelinkApi.connect(account);
-      } catch (error) {
-        this.log("Failed to connect to eWeLink API:", error);
-      }
-    } else {
-      this.log("No account information found or Homey settings get method is undefined.");
-    }
+    // Initialize the API clients but don't connect yet
+    this.httpClient = null;
+    this.wsClient = null;
+    this.lanClient = null;
   }
 
-  async checkAndInitializeSettings(retries = 5) {
-    while (retries > 0) {
-      if (this.homey.settings && typeof this.homey.settings.get === 'function') {
-        this.log('Homey settings initialized successfully.');
-        break;
-      }
-      this.log('Homey settings not initialized, retrying...');
-      await new Promise(resolve => setTimeout(resolve, 1000)); // Wait for 1 second
-      retries--;
-    }
+  async connectToEwelink(account) {
+    try {
+      this.log("Connecting to eWeLink with account:", account);
+      const config = {
+        username: account.login,
+        password: account.password,
+        countryCode: account.countryCode,
+        debug: false,
+      };
+      this.httpClient = new eWeLinkHTTP(config, this.log);
+      await this.httpClient.getHost();
+      this.authData = await this.httpClient.login();
 
-    if (retries === 0) {
-      this.log('Failed to initialize Homey settings after multiple attempts.');
+      const deviceList = await this.httpClient.getDevices();
+      deviceList.forEach(device => this.devicesInEwelink.set(device.deviceid, device));
+
+      this.wsClient = new eWeLinkWS(config, this.log, this.authData);
+      await this.wsClient.getHost();
+      this.wsClient.login();
+
+      this.lanClient = new eWeLinkLAN(config, this.log, deviceList);
+      await this.lanClient.startMonitor();
+
+      this.log("API successfully started");
+    } catch (error) {
+      this.log("Error during eWeLink connection:", error);
     }
   }
 
   async onSettingsChanged(key) {
-    if (!this.homey.settings || typeof this.homey.settings.get !== 'function') {
-      this.log("Error: Homey settings object is not initialized properly.");
-      return;
+    if (key === "account") {
+      const account = this.homey.settings.get("account");
+      if (account) {
+        await this.connectToEwelink(account);
+      }
     }
-
-    switch (key) {
-      case "account":
-        // Handle account changes
-        const account = this.homey.settings.get('account');
-        try {
-          await this.ewelinkApi.eWeLinkShutdown();
-          if (account) {
-            await this.ewelinkApi.connect(account);
-          }
-        } catch (error) {
-          this.log("Failed to handle account changes:", error);
-        }
-        break;
-      default:
-        break;
-    }
-  }
-
-  sign(signData) {
-    return this.ewelinkApi.sign(signData);
-  }
-
-  getDevices(signData) {
-    return this.ewelinkApi.getAllDevices(signData);
   }
 }
 
